@@ -17,6 +17,8 @@ interface MyInputProps {
     returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
     editable?: boolean;
     textAlign?: 'left' | 'right' | 'center';
+    onFocus?: () => void;
+    label?: string;
 }
 
 const MyInput = ({
@@ -33,7 +35,9 @@ const MyInput = ({
     onSubmitEditing, 
     returnKeyType, 
     editable, 
-    textAlign
+    textAlign,
+    onFocus,
+    label
 }: MyInputProps) => {
   const theme = useTheme()
   return (
@@ -52,7 +56,8 @@ const MyInput = ({
       editable={editable}
       textAlign={textAlign}
       placeholderTextColor={"gray"}
-      focusable
+      onFocus={onFocus}
+      label={label}
     />
   )
 }

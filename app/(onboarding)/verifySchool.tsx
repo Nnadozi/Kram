@@ -1,12 +1,13 @@
 import MyText from '@/components/MyText'
 import OnboardScreen from '@/components/OnboardScreen'
-import { useAuthStore } from '@/stores/authStore'
-import { router } from 'expo-router'
+import { useUserStore } from '@/stores/userStore'
+import { router, useLocalSearchParams } from 'expo-router'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 
 const verifySchool = () => {
-  const { user, isAuthenticated, loading, setUser, setIsAuthenticated, setLoading, logOut } = useAuthStore()
+  const { userObject, setUserObject } = useUserStore()
+  const { school, state, email } = useLocalSearchParams()
   return (
     <OnboardScreen
       title="Verify Your School"
@@ -19,6 +20,9 @@ const verifySchool = () => {
       <MyText>2. Enter school email</MyText>
       <MyText>3. Send OTP to school email</MyText>
       <MyText>4. Enter OTP to verify</MyText>
+      <MyText>School: {school}</MyText>
+      <MyText>State: {state}</MyText>
+      <MyText>Email: {email}</MyText>
     </OnboardScreen>
   )
 }

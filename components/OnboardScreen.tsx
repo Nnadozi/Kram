@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, ViewStyle } from 'react-native'
 import ConfettiCannon from 'react-native-confetti-cannon'
 import { ProgressBar, useTheme } from 'react-native-paper'
 import MyButton from './MyButton'
@@ -11,11 +11,13 @@ interface OnboardScreenProps {
   description: string
   buttonText?: string
   onButtonPress: () => void
+  buttonEnabled?: boolean
   progress: number
   children?: React.ReactNode
+  style?: ViewStyle
 }
 
-const OnboardScreen = ({title, description, buttonText, onButtonPress, progress, children}: OnboardScreenProps) => {
+const OnboardScreen = ({title, description, buttonText, onButtonPress, buttonEnabled = true, progress, children, style}: OnboardScreenProps) => {
   const theme = useTheme()
   return (
     <Page style={styles.container}>
@@ -24,10 +26,10 @@ const OnboardScreen = ({title, description, buttonText, onButtonPress, progress,
             <MyText textAlign='center' bold fontSize='large'>{title}</MyText>
             <MyText textAlign='center'>{description}</MyText>
         </View>
-        <View style={styles.contentContainer}>
+        <View style={[styles.contentContainer, style]}>
             {children}
         </View>
-        <MyButton title={buttonText ?? 'Continue'} onPress={onButtonPress} width={300} />
+        <MyButton title={buttonText ?? 'Continue'} onPress={onButtonPress} width={300} disabled={!buttonEnabled} />
         {title == "All Done!" && <ConfettiCannon fallSpeed={2500} explosionSpeed={300 } count={200} origin={{x: -10, y: 0}} />}
     </Page>
   )
@@ -39,6 +41,7 @@ const styles = StyleSheet.create({
     container:{
         justifyContent:'space-between',
         alignItems:'center',
+
     },
     topSection:{
         marginBottom: 10,
@@ -47,6 +50,7 @@ const styles = StyleSheet.create({
     contentContainer:{
         //borderWidth: 1,
         width: '100%',
+        flex:1
     },
     progressBar: {
         borderRadius: 10,

@@ -1,21 +1,26 @@
+import { Profile } from "@/types/Profile";
 import { User } from "firebase/auth";
 import { create } from "zustand";
 
 type AuthStore = {
-    user: User | null;
+    userObject: User | null;
+    userProfile: Profile | null;
     isAuthenticated: boolean;
     loading: boolean;
-    setUser: (user: User) => void;
+    setUserObject: (user: User) => void;
+    setUserProfile: (profile: Profile) => void;
     setIsAuthenticated: (isAuthenticated: boolean) => void;
     setLoading: (loading: boolean) => void;
     logOut: () => void;
 }
 
-const useAuthStore = create<AuthStore>((set) => ({
-    user: null,
+const useUserStore = create<AuthStore>((set) => ({
+    userObject: null,
+    userProfile: null,
     isAuthenticated: false,
     loading: false,
-    setUser: (user: User) => set({ user }),
+    setUserObject: (user: User) => set({ userObject: user }),
+    setUserProfile: (profile: Profile) => set({ userProfile: profile }),
     setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
     setLoading: (loading: boolean) => set({ loading }),
     logOut: () => {
@@ -23,4 +28,4 @@ const useAuthStore = create<AuthStore>((set) => ({
     }
 })) 
 
-export { useAuthStore };
+export { useUserStore };
