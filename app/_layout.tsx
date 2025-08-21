@@ -16,9 +16,12 @@ export default function RootLayout() {
       <ThemedStatusBar />
       <SafeAreaProvider>
         <Stack screenOptions={{gestureEnabled:false, headerShown:false}}>
+          <Stack.Screen name="(onboarding)" />
           <Stack.Screen name="(main)" />
         </Stack>
       </SafeAreaProvider>
+
+
     </PaperProvider>
   )
 }

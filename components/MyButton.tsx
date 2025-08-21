@@ -20,7 +20,7 @@ const MyButton = ({title, onPress, style, disabled, width, marginVertical, isLoa
       icon={icon}
       mode={mode || "contained"}
       onPress={onPress}
-      style={[style,{marginVertical:marginVertical, width:width}]}
+      style={[style,{marginVertical:marginVertical, width:width || '100%'}]}
       disabled={disabled}
       loading={isLoading}
     >
