@@ -1,17 +1,18 @@
-import { auth, db } from "@/firebase/firebaseConfig";
+import { db } from "@/firebase/firebaseConfig";
 import { Profile } from "@/types/Profile";
-import { signOut, User } from "firebase/auth";
+import { User } from "firebase/auth";
 import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore";
 import { create } from "zustand";
 
 type UserStore = {
     userObject: User | null;
     userProfile: Profile | null;
+    isOnboarded: boolean;
     isAuthenticated: boolean;
     loading: boolean;
     setUserObject: (user: User) => void;
     setUserProfile: (profile: Profile) => void;
-    fetchUserProfile: (uid: string) => Promise<void>;
+    setIsOnboarded: (isOnboarded: boolean) => void;
     setIsAuthenticated: (isAuthenticated: boolean) => void;
     setLoading: (loading: boolean) => void;
     logOut: () => void;
@@ -20,6 +21,7 @@ type UserStore = {
 const useUserStore = create<UserStore>((set) => ({
     userObject: null,
     userProfile: null,
+    isOnboarded: false,
     isAuthenticated: false,
     loading: false,
     setUserObject: (user: User) =>{
@@ -46,15 +48,9 @@ const useUserStore = create<UserStore>((set) => ({
             })
         }
     },
-    fetchUserProfile: async (uid: string) => {
-        const docRef = doc(db, 'users', uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            const profile = docSnap.data() as Profile;
-            set({ userProfile: profile });
-        } else {
-            set({ userProfile: null });
-        }
+    setIsOnboarded: (isOnboarded: boolean) =>{
+        console.log('setting is onboarded', isOnboarded)
+        set({ isOnboarded })
     },
     setIsAuthenticated: (isAuthenticated: boolean) =>{
         console.log('setting is authenticated', isAuthenticated)
@@ -64,16 +60,9 @@ const useUserStore = create<UserStore>((set) => ({
         console.log('setting loading', loading)
         set({ loading })
     },
-    logOut: async () => {
+    logOut: () => {
         console.log('logging out')
-        try {
-            await signOut(auth)
-            set({ userObject: null, userProfile: null, isAuthenticated: false, loading: false })
-            console.log('logged out successfully')
-        } catch (error) {
-            console.error('Error during logout:', error)
-            set({ userObject: null, userProfile: null, isAuthenticated: false, loading: false })
-        }
+        set({ userObject: null, userProfile: null, isOnboarded: false, isAuthenticated: false, loading: false })
     }
 })) 
 

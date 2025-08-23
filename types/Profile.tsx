@@ -4,12 +4,12 @@ export interface Profile {
     uid: string;
     email: string;
     school: string;
-    state: string;
     firstName: string;
     lastName: string;
     profilePicture: string;
     bio: string;
-    year: string;
+    graduationYear: number;
+    isOnboarded: boolean;
     createdAt: Timestamp;
     updatedAt: Timestamp;
   }

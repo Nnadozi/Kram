@@ -20,7 +20,7 @@ const findSchool = () => {
   const [email, setEmail] = useState('')
   const theme = useTheme()
 
-  let apiKey = process.env.EXPO_PUBLIC_COLLEGE_SCORECARD_API_KEY || "V0qyYyoEqlRURdyUfo5Ki9kcUrJcxHLmeEtckRcA"
+  let apiKey = process.env.EXPO_PUBLIC_COLLEGE_SCORECARD_API_KEY 
 
   // Fetch schools when state is selected
   useEffect(() => {
@@ -108,7 +108,7 @@ const findSchool = () => {
     router.navigate({pathname: '/(onboarding)/verifySchool', params: {
       school: selectedSchool,
       state: selectedState,
-      email: email
+      email: email.trim()
     }})
   }
 
@@ -193,6 +193,7 @@ const findSchool = () => {
                 value={email}
                 onChangeText={(text) => setEmail(text)}
                 style={{marginTop: 10}}
+                keyboardType='email-address'
               />
             )
           }

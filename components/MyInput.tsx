@@ -1,11 +1,13 @@
-import { DimensionValue, KeyboardTypeOptions, TextStyle } from 'react-native';
+import { DimensionValue, KeyboardTypeOptions, TextStyle, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
+import MyText from './MyText';
 
 interface MyInputProps {
     placeholder: string;
     value?: string;
     onChangeText?: (text: string) => void;
     mode?: 'flat' | 'outlined';
+    secureTextEntry?: boolean;
 
     style?: TextStyle;
     width?: DimensionValue;
@@ -19,6 +21,7 @@ interface MyInputProps {
     textAlign?: 'left' | 'right' | 'center';
     onFocus?: () => void;
     label?: string;
+    showMaxLength?: boolean;
 }
 
 const MyInput = ({
@@ -26,6 +29,7 @@ const MyInput = ({
     value = '', 
     onChangeText = () => {}, 
     mode = 'outlined',
+    secureTextEntry = false,
     style, 
     width = '100%', 
     maxLength, 
@@ -37,28 +41,39 @@ const MyInput = ({
     editable, 
     textAlign,
     onFocus,
-    label
+    label,
+    showMaxLength = false
 }: MyInputProps) => {
   const theme = useTheme()
   return (
-    <TextInput
-      value={value}
-      placeholder={placeholder}
-      onChangeText={onChangeText}
-      mode={mode}
-      style={[ { width }, style]}
-      maxLength={maxLength}
-      keyboardType={keyboardType}
-      multiline={multiline}
-      numberOfLines={numberOfLines}
-      onSubmitEditing={onSubmitEditing}
-      returnKeyType={returnKeyType}
-      editable={editable}
-      textAlign={textAlign}
-      placeholderTextColor={"gray"}
-      onFocus={onFocus}
-      label={label}
-    />
+    <View style={{ width }}>
+      <TextInput
+        value={value}
+        placeholder={placeholder}
+        onChangeText={onChangeText}
+        mode={mode}
+        style={[{ width: '100%' }, style]}
+        maxLength={maxLength}
+        keyboardType={keyboardType}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
+        onSubmitEditing={onSubmitEditing}
+        returnKeyType={returnKeyType}
+        editable={editable}
+        textAlign={textAlign}
+        placeholderTextColor={"gray"}
+        onFocus={onFocus}
+        label={label}
+        autoCapitalize='none'
+        textAlignVertical='top'
+        secureTextEntry={secureTextEntry}
+      />
+      {showMaxLength && (
+        <MyText textAlign='right' gray>
+          {value.length}/{maxLength}
+        </MyText>
+      )}
+    </View>
   )
 }
 
