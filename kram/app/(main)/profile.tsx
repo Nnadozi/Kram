@@ -5,23 +5,41 @@ import { Page } from '@/components/page'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Icon } from '@/components/ui/icon'
 import { Settings } from 'lucide-react-native'
+import { useUserStore } from '@/stores/userStore'
+import { Button } from '@/components/ui/button'
 
 const Profile = () => {
+  const { userProfile, signOut } = useUserStore()
+
+  const renderValue = (key: string, value: any) => {
+    if (Array.isArray(value)) {
+      return value.length > 0 ? value.join(', ') : 'None'
+    }
+    if (typeof value === 'boolean') {
+      return value ? 'Yes' : 'No'
+    }
+    if (typeof value === 'object' && value !== null) {
+      return 'Object data'
+    }
+    return value?.toString() || 'Not set'
+  }
+  
   return (
     <Page className='items-center justify-start'>
-      <View className='w-full flex-row items-center justify-between mb-3'>
-        <View/>
-        <Text className='font-bold' variant={'h4'}>Profile</Text>
-        <TouchableOpacity>
-          <Icon as={Settings} size={25} />
-        </TouchableOpacity>
-      </View>
-      <Avatar className='size-40' alt="Zach Nugent's Avatar">
-        <AvatarImage source={{ uri: 'https://github.com/mrzachnugent.png' }} />
-        <AvatarFallback>
-          <Text>CN</Text>
-        </AvatarFallback>
-      </Avatar>
+      {userProfile ? (
+        <View className='w-full space-y-4ßß'>
+          {Object.entries(userProfile).map(([key, value]) => (
+            <Text key={key}>
+              {key}: {renderValue(key, value)}
+            </Text>
+          ))}
+        </View>
+      ) : (
+        <Text>No profile data available</Text>
+      )}
+      <Button onPress={signOut}>
+        <Text>Sign out</Text>
+      </Button>
     </Page>
   )
 }

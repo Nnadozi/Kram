@@ -1,11 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet,  } from 'react-native'
 import React from 'react'
+import { Page } from '@/components/page'
+import { Text } from '@/components/ui/text'
+import { Button } from '@/components/ui/button'
+import { router } from 'expo-router'
 
 const Discover = () => {
+  async function createGroup() {
+    
+  }
   return (
-    <View>
-      <Text>discover</Text>
-    </View>
+    <Page>
+      <Text>Discover</Text>
+      <Button onPress={() => router.navigate('/(main)/groups')}>
+        <Text>Create Group</Text>
+      </Button>
+    </Page>
   )
 }
 

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { auth, db } from '@/firebase/firebaseConfig'
 import { signInWithEmailAndPassword } from 'firebase/auth'
@@ -8,6 +8,7 @@ import { router } from 'expo-router'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Page } from '@/components/page'
+import { Text } from '@/components/ui/text'
 
 const SigninScreen = () => {
   const [email, setEmail] = useState('')
@@ -38,7 +39,7 @@ const SigninScreen = () => {
         router.navigate('/(onboarding)/profileSetupOne')
       }
     } catch (error) {
-      console.error('Sign in error:', error)
+      Alert.alert('Error', (error as Error).message)
     }
   }
   return (
@@ -48,6 +49,9 @@ const SigninScreen = () => {
       <Input placeholder='Password' value={password} onChangeText={setPassword} />
       <Button onPress={signIn}>
         <Text>Sign in</Text>
+      </Button>
+      <Button style={{ marginTop: 50 }} onPress={() => router.navigate('/(main)/groups')}>
+        <Text>DEV SKIPPPP</Text>
       </Button>
     </Page>
   )

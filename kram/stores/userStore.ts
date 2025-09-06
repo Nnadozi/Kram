@@ -1,9 +1,11 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { User } from 'firebase/auth'
+import { User, signOut as firebaseSignOut } from 'firebase/auth'
 import { UserProfile } from '@/types/UserProfile'
+import { auth } from '@/firebase/firebaseConfig'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '@/firebase/firebaseConfig'
+import { router } from 'expo-router'
 
 interface UserState {
   authUser: User | null
@@ -24,7 +26,21 @@ export const useUserStore = create<UserState>()(
       isAuthenticated: false,
       isLoading: true,
       userProfile: null,
-      signOut: () => {},
+      signOut: async () => {
+        try {
+          await firebaseSignOut(auth)
+          set({
+            authUser: null,
+            isAuthenticated: false,
+            isLoading: false,
+            userProfile: null,
+          })
+          console.log('User signed out successfully')
+          router.replace('/(auth)/signin')
+        } catch (error) {
+          console.error('Error signing out:', error)
+        }
+      },
       deleteAccount: () => {},
       setAuthUser: (user: User) => {
         console.log('signing in user', user)

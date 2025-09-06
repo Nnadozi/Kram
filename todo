@@ -1,12 +1,25 @@
-UI: https://reactnativereusables.com/docs/installation
-Auth: Try Clerk + Firebase
-DB: Firestore
-Maps; Google Maps API
-
+PRIORITY:
+- Groups and discovery
 
 Auth:
-- finish social auth
+- finish sociaßl auth (try clerk?)
 - error handling
 - email verification
 - edge cases
 - try jules
+- forgot password
+- reset password
+- dont have account? sign upß
+- delete account
+
+Onboardingß
+- Add dropdowns
+- Find APIS   
+
+UI
+- Make look good
+
+Nav
+- Clean up router structure
+- Fix root nav stack
+- try and add a drawer

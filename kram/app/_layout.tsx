@@ -49,7 +49,7 @@ export default function RootLayout() {
       } else {
         // User is signed out
         initializeAuth();
-        router.replace('/(onboarding)');
+        router.replace('/(auth)/signin');
       }
     });
 
@@ -63,6 +63,7 @@ export default function RootLayout() {
         <Stack.Screen name="(onboarding)" />
         <Stack.Screen name="(main)" />
         <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(groups)" />
       </Stack>
       <PortalHost />
     </ThemeProvider>
