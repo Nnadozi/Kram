@@ -3,3 +3,10 @@ Auth: Try Clerk + Firebase
 DB: Firestore
 Maps; Google Maps API
 
+
+Auth:
+- finish social auth
+- error handling
+- email verification
+- edge cases
+- try jules

@@ -2,13 +2,14 @@ import { Group } from "./Group";
 
 // Stored in Firestore
 export type UserProfile = {
-  uid: string;
-  name: string;
-  avatar: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   school:string
+  graduationYear:number;
   majors:string[]
   minors:string[]
-  graduationYear:number | string;
+  onboardingComplete: boolean;
   bio:string;
   groups: Group[]
 }

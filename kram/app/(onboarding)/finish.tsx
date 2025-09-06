@@ -1,11 +1,27 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { Page } from '@/components/page'
+import { Text } from '@/components/ui/text'
 import React from 'react'
+import { Button } from '@/components/ui/button'
+import { router } from 'expo-router'
+import { useUserStore } from '@/stores/userStore'
 
 const FinishScreen = () => {
+  const {setUserProfile} = useUserStore()
+  const handleNext = async () => {
+    const profile = {
+      onboardingComplete: true,
+    }
+    setUserProfile(profile)
+    router.navigate('/(main)/groups')
+  }
   return (
-    <View>
-      <Text>finish</Text>
-    </View>
+    <Page>
+      <Text>Finish</Text>
+      <Button onPress={handleNext}>
+        <Text>Start using Kram</Text>
+      </Button>
+    </Page>
   )
 }
 

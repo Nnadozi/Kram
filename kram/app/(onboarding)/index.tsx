@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { router } from 'expo-router';
 import * as React from 'react';
