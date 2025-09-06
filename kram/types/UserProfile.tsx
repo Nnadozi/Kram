@@ -12,6 +12,7 @@ export type UserProfile = {
   onboardingComplete: boolean;
   bio:string;
   groups: Group[]
+  avatar:any
 }
 
 /*

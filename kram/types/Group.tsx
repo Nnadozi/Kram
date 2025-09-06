@@ -11,4 +11,5 @@ export interface Group {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   meetups: Meetup[];
+  avatar:any
 }

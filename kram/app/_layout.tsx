@@ -11,14 +11,16 @@ import { auth, db } from '@/firebase/firebaseConfig';
 import { useUserStore } from '@/stores/userStore';
 import { doc, getDoc } from 'firebase/firestore';
 import { router } from 'expo-router';
-export {
+import { User } from 'firebase/auth';
+import { UserProfile } from '@/types/UserProfile';
+export {  
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
-  const { setAuthUser, setUserProfile, initializeAuth } = useUserStore();
+  const { setAuthUser, setUserProfile } = useUserStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -47,9 +49,10 @@ export default function RootLayout() {
           router.replace('/(onboarding)/profileSetupOne');
         }
       } else {
-        // User is signed out
-        initializeAuth();
-        router.replace('/(auth)/signin');
+        // User is signed out - go to onboarding index
+        setAuthUser(null as unknown as User);
+        setUserProfile(null as unknown as Partial<UserProfile>);
+        router.replace('/(onboarding)');
       }
     });
 

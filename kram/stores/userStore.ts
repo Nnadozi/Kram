@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { User, signOut as firebaseSignOut } from 'firebase/auth'
+import { User, signOut as firebaseSignOut, deleteUser } from 'firebase/auth'
 import { UserProfile } from '@/types/UserProfile'
 import { auth } from '@/firebase/firebaseConfig'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { db } from '@/firebase/firebaseConfig'
 import { router } from 'expo-router'
 
@@ -41,7 +41,32 @@ export const useUserStore = create<UserState>()(
           console.error('Error signing out:', error)
         }
       },
-      deleteAccount: () => {},
+      deleteAccount: async () => {
+        try {
+          const currentState = get()
+          const user = currentState.authUser
+          
+          if (!user) {
+            console.error('No user to delete')
+            return
+          }
+          const userDocRef = doc(db, 'users', user.uid)
+          await deleteDoc(userDocRef)
+          console.log('User document deleted from Firestore')
+          await deleteUser(user)
+          console.log('User deleted from Firebase Auth')
+          set({
+            authUser: null,
+            isAuthenticated: false,
+            isLoading: false,
+            userProfile: null,
+          })
+          router.replace('/(onboarding)')
+          console.log('Account deleted successfully')
+        } catch (error) {
+          console.error('Error deleting account:', error)
+        }
+      },
       setAuthUser: (user: User) => {
         console.log('signing in user', user)
         set({ 

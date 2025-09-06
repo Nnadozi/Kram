@@ -6,13 +6,10 @@ import { Button } from '@/components/ui/button'
 import { router } from 'expo-router'
 
 const Discover = () => {
-  async function createGroup() {
-    
-  }
   return (
     <Page>
       <Text>Discover</Text>
-      <Button onPress={() => router.navigate('/(main)/groups')}>
+      <Button onPress={() => router.navigate('/(groups)/createGroup')}>
         <Text>Create Group</Text>
       </Button>
     </Page>

@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
 import { Text } from '@/components/ui/text'
 import { Page } from '@/components/page'
@@ -9,7 +9,7 @@ import { useUserStore } from '@/stores/userStore'
 import { Button } from '@/components/ui/button'
 
 const Profile = () => {
-  const { userProfile, signOut } = useUserStore()
+  const { userProfile, signOut, deleteAccount } = useUserStore()
 
   const renderValue = (key: string, value: any) => {
     if (Array.isArray(value)) {
@@ -23,7 +23,13 @@ const Profile = () => {
     }
     return value?.toString() || 'Not set'
   }
-  
+
+  const deleteAccountHandler = () => {
+    Alert.alert('Delete Account', 'Are you sure you want to delete your account?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', onPress: () => deleteAccount() }
+    ])
+  }
   return (
     <Page className='items-center justify-start'>
       {userProfile ? (
@@ -39,6 +45,9 @@ const Profile = () => {
       )}
       <Button onPress={signOut}>
         <Text>Sign out</Text>
+      </Button>
+      <Button onPress={deleteAccountHandler}>
+        <Text>Delete Account</Text>
       </Button>
     </Page>
   )

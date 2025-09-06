@@ -1,5 +1,7 @@
 PRIORITY:
 - Groups and discovery
+- Clean up router structure
+- Fix root nav stack
 
 Auth:
 - finish sociaßl auth (try clerk?)
@@ -20,6 +22,7 @@ UI
 - Make look good
 
 Nav
-- Clean up router structure
-- Fix root nav stack
 - try and add a drawer
+
+Firestore Rules
+- Write/read groups + other stuff IF Authenticated

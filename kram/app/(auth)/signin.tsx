@@ -50,6 +50,9 @@ const SigninScreen = () => {
       <Button onPress={signIn}>
         <Text>Sign in</Text>
       </Button>
+      <Button style={{ marginTop: 50 }} onPress={() => router.navigate('/(auth)/signup')}>
+        <Text>New user? Sign up</Text>
+      </Button>
       <Button style={{ marginTop: 50 }} onPress={() => router.navigate('/(main)/groups')}>
         <Text>DEV SKIPPPP</Text>
       </Button>
