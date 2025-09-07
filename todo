@@ -1,10 +1,10 @@
 PRIORITY:
-- Groups and discovery
 - Clean up router structure
 - Fix root nav stack
+- Groups and discovery
 
 Auth:
-- finish sociaßl auth (try clerk?)
+- finish social auth (try clerk?)
 - error handling
 - email verification
 - edge cases
@@ -24,5 +24,9 @@ UI
 Nav
 - try and add a drawer
 
-Firestore Rules
+Firestore Rules + Security
 - Write/read groups + other stuff IF Authenticated
+
+Cleanuo
+- Try Jules
+ß

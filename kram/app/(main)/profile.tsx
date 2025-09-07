@@ -7,12 +7,17 @@ import { Icon } from '@/components/ui/icon'
 import { Settings } from 'lucide-react-native'
 import { useUserStore } from '@/stores/userStore'
 import { Button } from '@/components/ui/button'
+import { Group } from '@/types/Group'
 
 const Profile = () => {
   const { userProfile, signOut, deleteAccount } = useUserStore()
 
   const renderValue = (key: string, value: any) => {
     if (Array.isArray(value)) {
+      if (key === 'groups') {
+        // Special handling for groups array
+        return value.length > 0 ? value.map((group: Group) => group.name).join(', ') : 'No groups'
+      }
       return value.length > 0 ? value.join(', ') : 'None'
     }
     if (typeof value === 'boolean') {

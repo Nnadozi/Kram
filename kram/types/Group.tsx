@@ -11,5 +11,6 @@ export interface Group {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   meetups: Meetup[];
-  avatar:any
+  avatar: any;
+  createdBy: string; // User ID of the group creator
 }

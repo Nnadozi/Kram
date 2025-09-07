@@ -15,7 +15,7 @@ import uuid from 'react-native-uuid';
 const CreateGroup = () => {
   const [groupName, setGroupName] = useState('')
   const [groupDescription, setGroupDescription] = useState('')
-  const { userProfile, setUserProfile } = useUserStore()
+  const { userProfile, setUserProfile, authUser } = useUserStore()
 
   const createGroup =  async () => {
     const groupId = uuid.v4() 
@@ -23,6 +23,7 @@ const CreateGroup = () => {
       id: groupId,
       name: groupName,
       description: groupDescription,
+      createdBy: authUser?.uid || '',
     }
     setDoc(doc(db, 'groups', groupId), { ...group})
     setUserProfile({
