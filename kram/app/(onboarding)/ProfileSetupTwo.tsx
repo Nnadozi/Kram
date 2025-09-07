@@ -20,7 +20,7 @@ const ProfileSetupTwoScreen = () => {
       bio,
     }
     setUserProfile(profile)
-    router.navigate('/(onboarding)/enableNotifications')
+    router.replace('/(onboarding)/EnableNotifications')
   }
   return (
     <Page>

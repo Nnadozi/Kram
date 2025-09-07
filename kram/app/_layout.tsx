@@ -36,17 +36,17 @@ export default function RootLayout() {
             setUserProfile(profileData);
             
             if (!profileData?.onboardingComplete) {
-              router.replace('/(onboarding)/profileSetupOne');
+              router.replace('/(onboarding)/ProfileSetupOne');
             } else {
-              router.replace('/(main)/groups');
+              router.replace('/(main)/(tabs)/Groups');
             }
           } else {
             // No profile exists, start onboarding
-            router.replace('/(onboarding)/profileSetupOne');
+            router.replace('/(onboarding)/ProfileSetupOne');
           }
         } catch (error) {
           console.error('Error fetching user profile:', error);
-          router.replace('/(onboarding)/profileSetupOne');
+          router.replace('/(onboarding)/ProfileSetupOne');
         }
       } else {
         // User is signed out - go to onboarding index
@@ -66,7 +66,6 @@ export default function RootLayout() {
         <Stack.Screen name="(onboarding)" />
         <Stack.Screen name="(main)" />
         <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(groups)" />
       </Stack>
       <PortalHost />
     </ThemeProvider>

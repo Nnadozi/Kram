@@ -24,7 +24,7 @@ const SignupScreen = () => {
         email: userCredential.user.email,
         onboardingComplete: false,
       })
-      router.navigate('/(onboarding)/profileSetupOne')
+      router.replace('/(onboarding)/ProfileSetupOne')
     }).catch((error) => {
       Alert.alert(error.code, error.message)
     })

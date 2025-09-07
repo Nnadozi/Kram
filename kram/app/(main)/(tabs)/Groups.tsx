@@ -15,7 +15,7 @@ const Groups = () => {
         <View>
           {userProfile.groups.map((group: Group) => (
             <TouchableOpacity onPress={() => router.push({
-              pathname: '/(groups)/groupHome',
+              pathname: '/(main)/GroupHome',
               params: { groupId: group.id }
             })} key={group.id}>
               <Text key={group.id}>{group.name}</Text>

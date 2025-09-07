@@ -55,7 +55,7 @@ const Discover = () => {
 
   const handleGroupPress = (groupId: string) => {
     router.push({
-      pathname: '/(groups)/groupHome',
+      pathname: '/(main)/GroupHome',
       params: { groupId }
     })
   }
@@ -63,7 +63,7 @@ const Discover = () => {
   return (
     <Page>
       <Text variant={'large'}>Discover</Text>
-      <Button onPress={() => router.navigate('/(groups)/createGroup')}>
+      <Button onPress={() => router.push('/(main)/CreateGroup')}>
         <Text>Create Group</Text>
       </Button>
       

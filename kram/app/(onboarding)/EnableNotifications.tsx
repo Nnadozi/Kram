@@ -9,7 +9,7 @@ const EnableNotificationsScreen = () => {
   return (
     <Page>
       <Text>Enable Notifications</Text>
-      <Button onPress={() => router.navigate('/(onboarding)/finish')}>
+      <Button onPress={() => router.replace('/(onboarding)/Finish')}>
         <Text>Next</Text>
       </Button>
     </Page>
