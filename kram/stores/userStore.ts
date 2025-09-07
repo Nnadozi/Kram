@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import { User, signOut as firebaseSignOut, deleteUser } from 'firebase/auth'
 import { UserProfile } from '@/types/UserProfile'
 import { auth } from '@/firebase/firebaseConfig'
-import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/firebase/firebaseConfig'
 import { router } from 'expo-router'
 
@@ -84,7 +84,8 @@ export const useUserStore = create<UserState>()(
         const user = currentState.authUser
         if (user) {
           const userDocRef = doc(db, 'users', user.uid)
-          updateDoc(userDocRef, profile).then(() => {
+          const profileWithTimestamp = { ...profile, updatedAt: serverTimestamp() }
+          updateDoc(userDocRef, profileWithTimestamp).then(() => {
             console.log('user profile updated successfully', profile)
           }).catch((error) => {
             console.error('error updating user profile', error)

@@ -1,16 +1,16 @@
 import { UserProfile } from "./UserProfile";
-import { Timestamp } from "firebase/firestore";
+import { serverTimestamp } from "firebase/firestore";
 import { Meetup } from "./Meetup";
 
 export interface Group {
   id: string;
   name: string;
   description: string;
-  members: UserProfile[];
-  subjects: string[];
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-  meetups: Meetup[];
-  avatar: any;
-  createdBy: string; // User ID of the group creator
+  members: UserProfile[]; 
+  subjects: string[]; 
+  meetups: Meetup[]; 
+  avatar: any; 
+  createdBy: string; 
+  createdAt: typeof serverTimestamp;
+  updatedAt: typeof serverTimestamp; 
 }

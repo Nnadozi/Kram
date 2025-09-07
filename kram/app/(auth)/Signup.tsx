@@ -9,7 +9,7 @@ import { auth } from '@/firebase/firebaseConfig'
 import { useUserStore } from '@/stores/userStore'
 import { router } from 'expo-router'
 import { db } from '@/firebase/firebaseConfig'
-import { setDoc, doc } from 'firebase/firestore'
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore'
 
 const SignupScreen = () => {
   const [usingEmail, setUsingEmail] = useState(false)
@@ -23,6 +23,8 @@ const SignupScreen = () => {
       setDoc(doc(db, 'users', userCredential.user.uid), {
         email: userCredential.user.email,
         onboardingComplete: false,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       })
       router.replace('/(onboarding)/ProfileSetupOne')
     }).catch((error) => {

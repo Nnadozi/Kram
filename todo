@@ -1,32 +1,20 @@
-PRIORITY:
-- Clean up router structure
-- Fix root nav stack
-- Groups and discovery
-
 Auth:
 - finish social auth (try clerk?)
-- error handling
 - email verification
-- edge cases
-- try jules
+- implement error handling (wrong password, etc)
+- handle edge cases
 - forgot password
 - reset password
-- dont have account? sign upß
-- delete account
-
-Onboardingß
-- Add dropdowns
-- Find APIS   
-
-UI
-- Make look good
-
-Nav
-- try and add a drawer
+- dont have account? sign up
+- delete account bug (requires recent login)
+- fix nav for specific cases (new user, returning sign in, etc)
 
 Firestore Rules + Security
 - Write/read groups + other stuff IF Authenticated
+- Better deletion protection (ex: group deletion conformation)
 
-Cleanuo
-- Try Jules
-ß
+Async Coding (JULES)
+- Bug fixes (input validation, injections)
+- Upgrade dependencies
+- Documentation
+- Error handling

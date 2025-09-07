@@ -1,26 +1,35 @@
-import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Page } from '@/components/page'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { Input } from '@/components/ui/input'
 import { Group } from '@/types/Group'
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
 import { db } from '@/firebase/firebaseConfig'
+import GroupPreviewCard from '@/components/GroupPreviewCard'
+import { useUserStore } from '@/stores/userStore'
 
 const Discover = () => {
   const [search, setSearch] = useState('')
   const [allGroups, setAllGroups] = useState<Group[]>([])
   const [filteredGroups, setFilteredGroups] = useState<Group[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const { userProfile } = useUserStore()
 
-
+  // Fetch groups when screen mounts
   useEffect(() => {
     fetchAllGroups()
   }, [])
 
-  // Filter groups when search changes
+  // Refresh groups when screen comes into focus (e.g., returning from create group)
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAllGroups()
+    }, [])
+  )
+
   useEffect(() => {
     if (search.trim() === '') {
       setFilteredGroups(allGroups)
@@ -81,9 +90,7 @@ const Discover = () => {
             <FlatList
               data={filteredGroups}
               renderItem={({ item }: { item: Group }) => (
-                <TouchableOpacity onPress={() => handleGroupPress(item.id)}>
-                  <Text>{item.name}</Text>
-                </TouchableOpacity>
+                <GroupPreviewCard group={item} key={item.id} isJoined={userProfile?.groups?.some((group) => group.id === item.id) || false} />
               )}
             />
           ) : (
