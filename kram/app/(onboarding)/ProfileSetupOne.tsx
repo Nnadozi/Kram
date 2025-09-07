@@ -22,7 +22,7 @@ const ProfileSetupOneScreen = () => {
       graduationYear: parseInt(graduationYear),
     }
     setUserProfile(profile)
-    router.navigate('/(onboarding)/profileSetupTwo')
+    router.replace('/(onboarding)/ProfileSetupTwo')
   }
   return (
     <Page>

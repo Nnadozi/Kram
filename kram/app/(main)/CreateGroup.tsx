@@ -31,8 +31,8 @@ const CreateGroup = () => {
         ...group
       }] as Group[] 
     })
-    router.navigate({
-      pathname: '/(groups)/groupHome',
+    router.replace({
+      pathname: '/(main)/GroupHome',
       params: { groupId: groupId }
     })
   }

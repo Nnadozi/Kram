@@ -36,7 +36,7 @@ export const useUserStore = create<UserState>()(
             userProfile: null,
           })
           console.log('User signed out successfully')
-          router.replace('/(auth)/signin')
+          router.replace('/(auth)/Signin')
         } catch (error) {
           console.error('Error signing out:', error)
         }

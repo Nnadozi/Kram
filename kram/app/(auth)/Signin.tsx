@@ -30,13 +30,13 @@ const SigninScreen = () => {
         
         // Navigate based on onboarding status
         if (!profileData?.onboardingComplete) {
-          router.navigate('/(onboarding)/profileSetupOne')
+          router.replace('/(onboarding)/ProfileSetupOne')
         } else {
-          router.navigate('/(main)/groups')
+          router.replace('/(main)/(tabs)/Groups')
         }
       } else {
         // No profile exists, start onboarding
-        router.navigate('/(onboarding)/profileSetupOne')
+        router.replace('/(onboarding)/ProfileSetupOne')
       }
     } catch (error) {
       Alert.alert('Error', (error as Error).message)
@@ -50,10 +50,10 @@ const SigninScreen = () => {
       <Button onPress={signIn}>
         <Text>Sign in</Text>
       </Button>
-      <Button style={{ marginTop: 50 }} onPress={() => router.navigate('/(auth)/signup')}>
+      <Button style={{ marginTop: 50 }} onPress={() => router.push('/(auth)/Signup')}>
         <Text>New user? Sign up</Text>
       </Button>
-      <Button style={{ marginTop: 50 }} onPress={() => router.navigate('/(main)/groups')}>
+      <Button style={{ marginTop: 50 }} onPress={() => router.replace('/(main)/(tabs)/Groups')}>
         <Text>DEV SKIPPPP</Text>
       </Button>
     </Page>

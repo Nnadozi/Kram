@@ -13,7 +13,7 @@ const FinishScreen = () => {
       onboardingComplete: true,
     }
     setUserProfile(profile)
-    router.navigate('/(main)/groups')
+    router.replace('/(main)/(tabs)/Groups')
   }
   return (
     <Page>
