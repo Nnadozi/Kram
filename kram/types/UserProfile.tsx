@@ -1,5 +1,6 @@
 import { Group } from "./Group";
 import { serverTimestamp } from "firebase/firestore";
+import { Meetup } from "./Meetup";
 
 // Stored in Firestore
 export type UserProfile = {

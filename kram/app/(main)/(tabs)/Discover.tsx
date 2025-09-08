@@ -71,7 +71,7 @@ const Discover = () => {
 
   return (
     <Page>
-      <Text variant={'large'}>Discover</Text>
+      <Text variant={'h3'}>Discover</Text>
       <Button onPress={() => router.push('/(main)/CreateGroup')}>
         <Text>Create Group</Text>
       </Button>

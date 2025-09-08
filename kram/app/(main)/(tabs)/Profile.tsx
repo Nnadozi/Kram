@@ -37,6 +37,7 @@ const Profile = () => {
   }
   return (
     <Page className='items-center justify-start'>
+      <Text variant={'h4'}>Profile</Text>
       {userProfile ? (
         <View className='w-full space-y-4ßß'>
           {Object.entries(userProfile).map(([key, value]) => (

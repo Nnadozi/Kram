@@ -7,6 +7,8 @@ import { Group } from '@/types/Group'
 import { router } from 'expo-router'
 import GroupPreviewCard from '@/components/GroupPreviewCard'
 import MyGroupPreviewCard from '@/components/MyGroupPreviewCard'
+import { Icon } from '@/components/ui/icon'
+import { Trash, Users, X } from 'lucide-react-native'
 
 const Groups = () => {
   const { userProfile, authUser } = useUserStore()
@@ -35,7 +37,11 @@ const Groups = () => {
           </View>
           </>
       ) : (
-        <Text>No groups</Text>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Icon color={'gray'} as={X} size={75} />
+          <Text  variant={'small'} className='text-gray-500 w-4/8 text-center mt-2 font-bold'>Your not in any groups</Text>
+          <Text  variant={'small'} className='text-gray-400 w-4/8 text-center mt-1'>Head over to Discover to get started</Text>
+        </View>
       )}
     </Page>
   )
