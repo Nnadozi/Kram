@@ -13,8 +13,26 @@ Firestore Rules + Security
 - Write/read groups + other stuff IF Authenticated
 - Better deletion protection (ex: group deletion conformation)
 
-Async Coding (JULES)
-- Bug fixes (input validation, injections)
-- Upgrade dependencies
-- Documentation
-- Error handling
+Code Quality
+- Modulate code (make better)
+- reduce reads / writes (caching)
+- Cleanup with Jukes
+
+Meetups
+- Seperate screen to show more info + attendes
+- Cancel, delete, etc
+
+Profile Screen
+- Implement this
+
+Settings Screen
+- Implement this
+
+UI DO THIS NOWWWWWW
+- Figure out a platform to helo with this (figma, stitich, etc)
+
+Cmmplex stuff
+- In person meetups: Maps API
+- Virtual meetups: figure this our
+
+MVP DUE: 10/1

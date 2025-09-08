@@ -45,8 +45,22 @@ const SigninScreen = () => {
   return (
     <Page>
       <Text>Sign in</Text>
-      <Input placeholder='Email' value={email} onChangeText={setEmail} />
-      <Input placeholder='Password' value={password} onChangeText={setPassword} />
+      <Input 
+        placeholder='Email' 
+        value={email} 
+        onChangeText={setEmail} 
+        maxLength={100}
+        autoCapitalize='none'
+        className='mb-4'
+      />
+      <Input 
+        placeholder='Password' 
+        value={password} 
+        onChangeText={setPassword} 
+        maxLength={50}
+        secureTextEntry
+        className='mb-4'
+      />
       <Button onPress={signIn}>
         <Text>Sign in</Text>
       </Button>

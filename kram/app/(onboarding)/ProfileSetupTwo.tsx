@@ -25,9 +25,30 @@ const ProfileSetupTwoScreen = () => {
   return (
     <Page>
       <Text>Profile Setup Two</Text>
-      <Input placeholder='Majors' value={majors} onChangeText={setMajors} />
-      <Input placeholder='Minors' value={minors} onChangeText={setMinors} />
-      <Input placeholder='Bio' value={bio} onChangeText={setBio} />
+      <Input 
+        placeholder='Majors' 
+        value={majors} 
+        onChangeText={setMajors} 
+        maxLength={200}
+        className='mb-4'
+      />
+      <Input 
+        placeholder='Minors' 
+        value={minors} 
+        onChangeText={setMinors} 
+        maxLength={200}
+        className='mb-4'
+      />
+      <Input 
+        placeholder='Bio' 
+        value={bio} 
+        onChangeText={setBio} 
+        maxLength={500}
+        multiline
+        numberOfLines={3}
+        inputHeight={80}
+        className='mb-4'
+      />
       <Button disabled={!majors || !bio} onPress={handleNext}>
         <Text>Next</Text>
       </Button>

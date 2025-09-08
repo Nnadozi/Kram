@@ -9,17 +9,23 @@ interface GroupPreviewCardProps {
   isJoined: boolean
 }
 
-const GroupPreviewCard = ({ group, isJoined }: GroupPreviewCardProps) => {
-  return (
-    <TouchableOpacity onPress={() => router.push({
+const GroupPreviewCard = React.memo(({ group, isJoined }: GroupPreviewCardProps) => {
+  const handlePress = React.useCallback(() => {
+    router.push({
       pathname: '/(main)/GroupHome',
       params: { groupId: group.id }
-    })}>
+    })
+  }, [group.id])
+
+  return (
+    <TouchableOpacity onPress={handlePress}>
       <Text>{group.name}</Text>
       <Text>{isJoined ? 'I AM PART OF THIS GROUP' : 'I HAVE NOT JOINED THIS GROUP'}</Text>
     </TouchableOpacity>
   )
-}
+})
+
+GroupPreviewCard.displayName = 'GroupPreviewCard'
 
 export default GroupPreviewCard
 

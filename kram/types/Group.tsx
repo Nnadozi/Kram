@@ -9,7 +9,6 @@ export interface Group {
   members: UserProfile[]; 
   subjects: string[]; 
   meetups: Meetup[]; 
-  avatar: any; 
   createdBy: string; 
   createdAt: typeof serverTimestamp;
   updatedAt: typeof serverTimestamp; 

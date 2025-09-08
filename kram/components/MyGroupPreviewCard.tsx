@@ -5,6 +5,7 @@ import { router } from 'expo-router'
 import { TouchableOpacity } from 'react-native'
 import { Text } from '@/components/ui/text'
 import { useUserStore } from '@/stores/userStore'
+import {NAV_THEME} from "@/lib/theme"
 
 interface MyGroupPreviewCardProps {
   group: Group
@@ -13,16 +14,23 @@ interface MyGroupPreviewCardProps {
 const MyGroupPreviewCard = ({ group }: MyGroupPreviewCardProps) => {
   const { authUser } = useUserStore()
   return (
-    <TouchableOpacity onPress={() => router.push({
+    <TouchableOpacity style={[styles.con, { borderColor: NAV_THEME.light.colors.border}]} onPress={() => router.push({
       pathname: '/(main)/GroupHome',
       params: { groupId: group.id }
     })}>
-      <Text>{group.name}</Text>
-      <Text>{group.createdBy === authUser?.uid ? 'I OWN THIS GROUP' : 'I AM A MEMBER OF THIS GROUP'}</Text>
+      <Text className='text-sm font-bold'>{group.name}</Text>
     </TouchableOpacity>
   )
 }
 
 export default MyGroupPreviewCard
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  con:{
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginTop: 5,
+    backgroundColor: 'white',
+  }
+})

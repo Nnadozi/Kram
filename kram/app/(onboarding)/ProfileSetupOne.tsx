@@ -27,10 +27,35 @@ const ProfileSetupOneScreen = () => {
   return (
     <Page>
       <Text>Profile Setup One</Text>
-      <Input placeholder='First Name' value={firstName} onChangeText={setFirstName} />
-      <Input placeholder='Last Name' value={lastName} onChangeText={setLastName} />
-      <Input placeholder='School' value={school} onChangeText={setSchool} />
-      <Input placeholder='Graduation Year' value={graduationYear} onChangeText={setGraduationYear} />
+      <Input 
+        placeholder='First Name' 
+        value={firstName} 
+        onChangeText={setFirstName} 
+        maxLength={50}
+        className='mb-4'
+      />
+      <Input 
+        placeholder='Last Name' 
+        value={lastName} 
+        onChangeText={setLastName} 
+        maxLength={50}
+        className='mb-4'
+      />
+      <Input 
+        placeholder='School' 
+        value={school} 
+        onChangeText={setSchool} 
+        maxLength={100}
+        className='mb-4'
+      />
+      <Input 
+        placeholder='Graduation Year' 
+        value={graduationYear} 
+        onChangeText={setGraduationYear} 
+        maxLength={4}
+        keyboardType='numeric'
+        className='mb-4'
+      />
       <Button disabled={!firstName || !lastName || !school || !graduationYear} onPress={handleNext}>
         <Text>Next</Text>
       </Button>

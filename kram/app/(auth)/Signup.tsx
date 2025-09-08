@@ -21,6 +21,7 @@ const SignupScreen = () => {
     await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
       setAuthUser(userCredential.user)
       setDoc(doc(db, 'users', userCredential.user.uid), {
+        id: userCredential.user.uid,
         email: userCredential.user.email,
         onboardingComplete: false,
         createdAt: serverTimestamp(),
@@ -46,8 +47,23 @@ const SignupScreen = () => {
       </Button>
       {usingEmail && (
         <View style = {{marginVertical: 50}}>
-          <Input autoCapitalize='none' value={email} onChangeText={setEmail} />
-          <Input autoCapitalize='none' value={password} onChangeText={setPassword} />
+          <Input 
+            autoCapitalize='none' 
+            value={email} 
+            onChangeText={setEmail} 
+            maxLength={100}
+            placeholder='Email'
+            className='mb-4'
+          />
+          <Input 
+            autoCapitalize='none' 
+            value={password} 
+            onChangeText={setPassword} 
+            maxLength={50}
+            placeholder='Password'
+            secureTextEntry
+            className='mb-4'
+          />
           <Button onPress={signUp}>
             <Text>Signup</Text>
           </Button>

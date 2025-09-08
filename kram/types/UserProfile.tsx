@@ -4,6 +4,7 @@ import { Meetup } from "./Meetup";
 
 // Stored in Firestore
 export type UserProfile = {
+  id: string; // Firebase UID
   firstName: string;
   lastName: string;
   email: string;

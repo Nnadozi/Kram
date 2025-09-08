@@ -9,8 +9,8 @@ export interface Meetup {
   location: string;
   date: Timestamp;
   time: Timestamp;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: Timestamp | Date;
+  updatedAt: Timestamp | Date;
   length: number;
   attendees: UserProfile[];
   groupId: string;
