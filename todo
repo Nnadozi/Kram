@@ -1,38 +1,4 @@
-Auth:
-- finish social auth (try clerk?)
-- email verification
-- implement error handling (wrong password, etc)
-- handle edge cases
-- forgot password
-- reset password
-- dont have account? sign up
-- delete account bug (requires recent login)
-- fix nav for specific cases (new user, returning sign in, etc)
-
-Firestore Rules + Security
-- Write/read groups + other stuff IF Authenticated
-- Better deletion protection (ex: group deletion conformation)
-
-Code Quality
-- Modulate code (make better)
-- reduce reads / writes (caching)
-- Cleanup with Jukes
-
-Meetups
-- Seperate screen to show more info + attendes
-- Cancel, delete, etc
-
-Profile Screen
-- Implement this
-
-Settings Screen
-- Implement this
-
-UI DO THIS NOWWWWWW
-- Figure out a platform to helo with this (figma, stitich, etc)
-
-Cmmplex stuff
-- In person meetups: Maps API
-- Virtual meetups: figure this our
-
-MVP DUE: 10/1
+MVP by 10/1
+- onboarding screen two
+- forgot / reset password
+- social auth
