@@ -1,66 +1,211 @@
 import CustomInput from '@/components/CustomInput'
+import CustomText from '@/components/CustomText'
 import OnboardingPage from '@/components/OnboardingPage'
+import { searchAcademicFields } from '@/constants/majorsMinors'
 import { useUserStore } from '@/stores/userStore'
 import { router } from 'expo-router'
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
+import { Chip, useTheme } from 'react-native-paper'
 
 const ProfileSetupTwo = () => {
   const { setUserProfile } = useUserStore()
-  const [majors, setMajors] = useState('')
-  const [minors, setMinors] = useState('')
+  const [selectedMajors, setSelectedMajors] = useState<string[]>([])
+  const [selectedMinors, setSelectedMinors] = useState<string[]>([])
+  const [majorSearch, setMajorSearch] = useState('')
+  const [minorSearch, setMinorSearch] = useState('')
   const [bio, setBio] = useState('')
   const [avatar, setAvatar] = useState('')
+  const handleMajorSelect = (major: string) => {
+    if (selectedMajors.includes(major)) {
+      setSelectedMajors(selectedMajors.filter(m => m !== major))
+    } else {
+      setSelectedMajors([...selectedMajors, major])
+    }
+  }
+
+  const handleMinorSelect = (minor: string) => {
+    if (selectedMinors.includes(minor)) {
+      setSelectedMinors(selectedMinors.filter(m => m !== minor))
+    } else {
+      setSelectedMinors([...selectedMinors, minor])
+    }
+  }
+
+  const isFormValid = () => {
+    return selectedMajors.length > 0 && bio.trim().length > 0
+  }
+
   const handleButtonPress = () => {
+    if (!isFormValid()) {
+      return
+    }
+
     setUserProfile({
-      majors: majors.split(',').map(m => m.trim()).filter(m => m),
-      minors: minors.split(',').map(m => m.trim()).filter(m => m),
+      majors: selectedMajors,
+      minors: selectedMinors,
       bio: bio,
       avatar: avatar,
     })
     router.navigate('/(onboarding)/EnableNotifications')
   }
+  const filteredMajors = searchAcademicFields(majorSearch)
+  const filteredMinors = searchAcademicFields(minorSearch)
+  const { colors } = useTheme()
+
   return (
     <OnboardingPage 
     title='A Few More Details' 
     description="Finish setting up your profile"
     progress={0.5} 
+    buttonDisabled={!isFormValid()}
     onButtonPress={handleButtonPress}
     >
-      <View style={{width: "100%", marginTop: 5, gap: 5, flex: 1}}> 
+      <View style={styles.container}> 
+        {/* Majors Section */}
+        <View style={styles.section}>
+          <CustomText bold fontSize="sm" gray>Major(s)</CustomText>
+          
+          {/* Selected Majors */}
+          {selectedMajors.length > 0 && (
+            <View style={styles.selectedContainer}>
+              {selectedMajors.map((major, index) => (
+                <Chip
+                  key={index}
+                  selected={true}
+                  onClose={() => setSelectedMajors(selectedMajors.filter(m => m !== major))}
+                  style={{ backgroundColor: colors.primary }}
+                  textStyle={{ color: colors.onPrimary }}
+                >
+                  {major}
+                </Chip>
+              ))}
+            </View>
+          )}
+          
+          {/* Major Search */}
+          <CustomInput
+            placeholder="Search majors..."
+            onChangeText={setMajorSearch}
+            value={majorSearch}
+          />
+          
+          {/* Major Options */}
+          {majorSearch.length > 0 && (
+            <View style={{ marginVertical: 5 }}>
+              <FlatList
+                data={filteredMajors.slice(0, 10)}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => item}
+                renderItem={({ item }) => (
+                  <Chip
+                    selected={selectedMajors.includes(item)}
+                    onPress={() => handleMajorSelect(item)}
+                    style={{ 
+                      backgroundColor: selectedMajors.includes(item) ? colors.primary : colors.surfaceVariant,
+                      marginRight: 8
+                    }}
+                    textStyle={{ color: selectedMajors.includes(item) ? colors.onPrimary : colors.onSurfaceVariant }}
+                  >
+                    {item}
+                  </Chip>
+                )}
+              />
+            </View>
+          )}
+          
+        </View>
+
+        {/* Minors Section */}
+        <View style={styles.section}>
+          <CustomText bold fontSize="sm" gray>Minor(s) (Optional)</CustomText>
+          
+          {/* Selected Minors */}
+          {selectedMinors.length > 0 && (
+            <View style={styles.selectedContainer}>
+              {selectedMinors.map((minor, index) => (
+                <Chip
+                  key={index}
+                  selected={true}
+                  onClose={() => setSelectedMinors(selectedMinors.filter(m => m !== minor))}
+                  style={{ backgroundColor: colors.primary }}
+                  textStyle={{ color: colors.onPrimary }}
+                >
+                  {minor}
+                </Chip>
+              ))}
+            </View>
+          )}
+          
+          {/* Minor Search */}
+          <CustomInput
+            placeholder="Search minors..."
+            onChangeText={setMinorSearch}
+            value={minorSearch}
+          />
+          
+          {/* Minor Options */}
+          {minorSearch.length > 0 && (
+            <View style={{ marginVertical: 5 }}>
+              <FlatList
+                data={filteredMinors.slice(0, 10)}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => item}
+                renderItem={({ item }) => (
+                  <Chip
+                    selected={selectedMinors.includes(item)}
+                    onPress={() => handleMinorSelect(item)}
+                    style={{ 
+                      backgroundColor: selectedMinors.includes(item) ? colors.primary : colors.surfaceVariant,
+                      marginRight: 8
+                    }}
+                    textStyle={{ color: selectedMinors.includes(item) ? colors.onPrimary : colors.onSurfaceVariant }}
+                  >
+                    {item}
+                  </Chip>
+                )}
+              />
+            </View>
+          )}
+          
+        </View>
+
+        {/* Bio Section */}
         <CustomInput
-          label='Majors'
-          value={majors}
-          onChangeText={setMajors}
-          maxLength={50}
-        />
-        <CustomInput
-          label='Minors'
-          value={minors}
-          onChangeText={setMinors}
-          maxLength={50}
-        />
-        <CustomInput
-          label='Short Bio'
+          placeholder='Short Bio (Optional)'
           value={bio}
           onChangeText={setBio}
           maxLength={200}
-          style={{height:100}}
+          style={styles.bioInput}
           multiline
           showCharCounter
         />
-        <CustomInput
-          label='Avatar'
-          value={avatar}
-          onChangeText={setAvatar}
-          maxLength={500}
-        />
       </View>
     </OnboardingPage>
-    //majors, minors, bio, avatar
   )
 }
 
 export default ProfileSetupTwo
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    marginTop: 5,
+    gap: 20,
+    flex: 1,
+  },
+  section: {
+    gap: 10,
+  },
+  selectedContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 10,
+  },
+  bioInput: {
+    height: 100,
+  },
+})

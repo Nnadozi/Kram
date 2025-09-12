@@ -96,12 +96,14 @@ const ProfileSetupOne = () => {
     >
       <View style={{width: "100%", marginTop: 5, gap: 5, flex: 1}}> 
         <CustomInput
+          placeholder='First Name'
           label='First Name'
           value={firstName}
           onChangeText={setFirstName}
           maxLength={50}
         />
         <CustomInput
+          placeholder='Last Name'
           label='Last Name'
           value={lastName}
           onChangeText={setLastName}
@@ -109,6 +111,7 @@ const ProfileSetupOne = () => {
         />
         <View>
           <CustomInput
+            placeholder='Search for your school...'
             label='School/University'
             value={schoolSearch}
             onChangeText={(text) => {
@@ -116,7 +119,6 @@ const ProfileSetupOne = () => {
               setShowSchoolList(true)
             }}
             onFocus={() => setShowSchoolList(true)}
-            placeholder="Search for your school..."
           />
           {showSchoolList && (
             <View style={styles.schoolList}>
@@ -139,6 +141,7 @@ const ProfileSetupOne = () => {
         </View>
         <CustomInput
           label='Graduation Year'
+          placeholder='Graduation Year'
           keyboardType='number-pad'
           value={graduationYear}
           onChangeText={setGraduationYear}
