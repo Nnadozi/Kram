@@ -1,4 +1,4 @@
-import { serverTimestamp } from "firebase/firestore";
+import { FieldValue } from "firebase/firestore";
 import { Group } from "./Group";
 
 export type UserProfile = {
@@ -14,8 +14,8 @@ export type UserProfile = {
   bio:string;
   groups: Group[]
   avatar:any
-  createdAt: typeof serverTimestamp;
-  updatedAt: typeof serverTimestamp;
+  createdAt: FieldValue | Date;
+  updatedAt: FieldValue | Date;
 }
 
 /*

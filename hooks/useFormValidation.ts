@@ -63,7 +63,7 @@ export const useFormValidation = (config: ValidationConfig): UseFormValidationRe
   const showValidationAlert = useCallback((fieldName: string, customMessage?: string) => {
     const fieldConfig = config[fieldName];
     const message = customMessage || fieldConfig?.errorMessage || 'Invalid input';
-    Alert.alert('Validation Error', message);
+    Alert.alert('Invalid Input', message);
   }, [config]);
 
   const isFieldValid = useCallback((fieldName: string, value: any): boolean => {

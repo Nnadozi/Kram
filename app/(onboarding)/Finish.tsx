@@ -22,7 +22,7 @@ const Finish = () => {
         description="Enjoy the app!"
         progress={1} 
         onButtonPress={() => {
-          router.navigate('/(main)/MyGroups')
+          router.navigate('/(main)/Groups')
           setUserProfile({ onboardingComplete: true })
         }}
         buttonTitle='Get Started'

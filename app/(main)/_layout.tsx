@@ -41,7 +41,7 @@ export default function MainLayout() {
         },
       }}
     >   
-      <Tabs.Screen options={{tabBarIcon: ({color}) => <FontAwesome6 name="people-group" size={20} color={color} />,}} name="MyGroups" />
+      <Tabs.Screen options={{tabBarIcon: ({color}) => <FontAwesome6 name="people-group" size={20} color={color} />}} name="Groups" />
       <Tabs.Screen options={{tabBarIcon: ({color}) => <FontAwesome name="search" size={20} color={color} />,}} name="Discover" />
       <Tabs.Screen options={{tabBarIcon: ({color}) => <FontAwesome name="calendar" size={20} color={color} />,}} name="Meetups" />
       <Tabs.Screen options={{tabBarIcon: ({color}) => <FontAwesome6 name="user" size={20} color={color} />,}} name="Profile" />

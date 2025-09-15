@@ -30,7 +30,7 @@ const Signin = () => {
   const { execute: signIn, isLoading, error } = useAsyncOperation({
     errorMessage: 'Failed to sign in. Please try again.',
     onSuccess: () => {
-      router.push('/(main)/MyGroups');
+      router.push('/(main)/Groups');
     },
     onError: (error) => {
       console.log(error);
@@ -67,7 +67,7 @@ const Signin = () => {
           if (!profileData?.onboardingComplete) {
             router.replace('/(onboarding)/ProfileSetupOne')
           } else {
-            router.replace('/(main)/MyGroups')
+            router.replace('/(main)/Groups')
           }
         } else {
           // No profile exists, start onboarding
@@ -94,6 +94,7 @@ const Signin = () => {
           onChangeText={setEmail}
           autoCapitalize='none'
           mode='outlined'
+          placeholder='Email'
         />
         <CustomInput
           label="Password"
@@ -103,6 +104,7 @@ const Signin = () => {
           onTogglePassword={() => setShowPassword(!showPassword)}
           onChangeText={setPassword}
           mode='outlined'
+          placeholder='Password'
         />
       </View>
       <View style={{width: "100%", marginTop: 15, gap: 10}}>

@@ -1,4 +1,10 @@
 export const academicFields: string[] = [
+  "Artificial Intelligence",
+  "Machine Learning",
+  "Deep Learning",
+  "Robotics",
+  "Cybersecurity",
+  "Blockchain",
   "Computer Science",
   "Electrical Engineering",
   "Mechanical Engineering",
@@ -29,7 +35,7 @@ export const academicFields: string[] = [
   "Entrepreneurship",
   "Supply Chain Management",
   "Human Resources",
-  "Business",
+  "Business Management",
   "Pre-Medicine",
   "Nursing",
   "Psychology",
@@ -95,7 +101,9 @@ export const academicFields: string[] = [
   "African American Studies",
   "Latin American Studies",
   "Asian Studies",
-  "International Studies"
+  "International Studies",
+  "Pre-Law",
+  "Pre-Medicine",
 ];
 
 export const searchAcademicFields = (query: string): string[] => {

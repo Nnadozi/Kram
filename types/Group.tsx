@@ -1,4 +1,4 @@
-import { serverTimestamp } from "firebase/firestore";
+import { FieldValue } from "firebase/firestore";
 import { Meetup } from "./Meetup";
 import { UserProfile } from "./UserProfile";
 
@@ -10,6 +10,6 @@ export interface Group {
   subjects: string[]; 
   meetups: Meetup[]; 
   createdBy: string; 
-  createdAt: typeof serverTimestamp;
-  updatedAt: typeof serverTimestamp; 
+  createdAt: FieldValue | Date;
+  updatedAt: FieldValue | Date; 
 }

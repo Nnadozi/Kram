@@ -21,6 +21,7 @@ const ProfileSetupTwo = () => {
       setSelectedMajors(selectedMajors.filter(m => m !== major))
     } else {
       setSelectedMajors([...selectedMajors, major])
+      setMajorSearch('') // Clear the search input
     }
   }
 
@@ -29,6 +30,7 @@ const ProfileSetupTwo = () => {
       setSelectedMinors(selectedMinors.filter(m => m !== minor))
     } else {
       setSelectedMinors([...selectedMinors, minor])
+      setMinorSearch('') // Clear the search input
     }
   }
 
@@ -72,7 +74,6 @@ const ProfileSetupTwo = () => {
               {selectedMajors.map((major, index) => (
                 <Chip
                   key={index}
-                  selected={true}
                   onClose={() => setSelectedMajors(selectedMajors.filter(m => m !== major))}
                   style={{ backgroundColor: colors.primary }}
                   textStyle={{ color: colors.onPrimary }}
@@ -127,7 +128,6 @@ const ProfileSetupTwo = () => {
               {selectedMinors.map((minor, index) => (
                 <Chip
                   key={index}
-                  selected={true}
                   onClose={() => setSelectedMinors(selectedMinors.filter(m => m !== minor))}
                   style={{ backgroundColor: colors.primary }}
                   textStyle={{ color: colors.onPrimary }}
@@ -174,7 +174,7 @@ const ProfileSetupTwo = () => {
 
         {/* Bio Section */}
         <CustomInput
-          placeholder='Short Bio (Optional)'
+          placeholder='Short Bio'
           value={bio}
           onChangeText={setBio}
           maxLength={200}

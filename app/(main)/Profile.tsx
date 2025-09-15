@@ -5,8 +5,8 @@ import { StyleSheet } from 'react-native'
 
 const Profile = () => {
   return (
-    <Page>
-      <CustomText>Profile</CustomText>
+    <Page style = {{justifyContent: 'flex-start', alignItems: 'center'}}>
+      <CustomText textAlign='center' bold fontSize='xl'>Profile</CustomText>
     </Page>
   )
 }

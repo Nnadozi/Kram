@@ -85,12 +85,14 @@ const SignUp = () => {
           onChangeText={setEmail}
           mode='outlined'
           autoCapitalize='none'
+          placeholder='Email' 
         />
         <CustomInput
           label="Password"
           value={password}
           onChangeText={setPassword}
           mode='outlined'
+          placeholder='Password'
           autoCapitalize='none'
           secureTextEntry={!showPassword}
           showPasswordToggle={true}

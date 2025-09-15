@@ -4,8 +4,8 @@ import { StyleSheet } from 'react-native'
 
 const Meetups = () => {
   return (
-    <Page>
-      <CustomText>Meetups</CustomText>
+    <Page style = {{justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+      <CustomText bold fontSize='2xl'>Meetups</CustomText>
     </Page> 
   )
 }

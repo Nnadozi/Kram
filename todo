@@ -1,5 +1,8 @@
-MVP by 10/1
-- onboarding screen two
-- forgot / reset password
-- social auth
-- merge to main
+Jules:
+- bug fixes
+- documentation
+- use of hooks and utils
+- simplify code / make it more concise
+- "Validation error", simplify this hook plz
+
+
