@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: 20,
+    paddingHorizontal: 8,
   },
 })
