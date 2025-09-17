@@ -1,5 +1,4 @@
 import CustomText from '@/components/CustomText'
-import MyGroup from '@/components/MyGroup'
 import Page from '@/components/Page'
 import { useUserStore } from '@/stores/userStore'
 import { useFocusEffect } from '@react-navigation/native'
@@ -22,13 +21,18 @@ const Groups = () => {
       // This will run every time the screen comes into focus
       // The groups will automatically update from the store
       console.log('Groups tab focused - refreshing groups list')
-      console.log('Current groups:', groups.map(g => g.name))
+      console.log('Current group IDs:', groups)
     }, [groups])
   )
 
-  const renderGroup = ({ item }: { item: any }) => {
+  const renderGroup = ({ item }: { item: string }) => {
     if (!item) return null
-    return <MyGroup group={item} />
+    // For now, just show the group ID until we fetch full group data
+    return (
+      <View style={{ padding: 10, backgroundColor: '#f0f0f0', margin: 5, borderRadius: 8 }}>
+        <CustomText>Group ID: {item}</CustomText>
+      </View>
+    )
   }
 
   return (
@@ -53,7 +57,7 @@ const Groups = () => {
         <FlatList
           data={groups}
           renderItem={renderGroup}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainer}
           style={styles.list}

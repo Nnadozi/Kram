@@ -1,14 +1,16 @@
+import CustomButton from '@/components/CustomButton'
 import CustomText from '@/components/CustomText'
 import Page from '@/components/Page'
 import { useUserStore } from '@/stores/userStore'
 import { router } from 'expo-router'
+import { Timestamp } from 'firebase/firestore'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Avatar, Card, Icon, useTheme } from 'react-native-paper'
 
 
 const Profile = () => {
   const {colors} = useTheme();
-  const {userProfile} = useUserStore();
+  const {userProfile, signOut} = useUserStore();
   
   return (
     <Page style={styles.container}>
@@ -25,7 +27,7 @@ const Profile = () => {
           {userProfile?.firstName} {userProfile?.lastName}
         </CustomText>
         <CustomText textAlign='center'>
-          {userProfile?.school} '{userProfile?.graduationYear?.toString().slice(-2)}
+          {userProfile?.school} &apos;{userProfile?.graduationYear?.toString().slice(-2)}
         </CustomText>
       </View>
       
@@ -58,7 +60,7 @@ const Profile = () => {
           <Card style={styles.card}>
             <Card.Content>
               <CustomText bold fontSize='lg' style={{marginBottom: 10}}>Groups</CustomText>
-              <CustomText  style={{flex: 1}}>{userProfile.groups.map((group) => group.name).join(', ')}</CustomText>
+              <CustomText  style={{flex: 1}}>{userProfile.groups.length} group(s) joined</CustomText>
             </Card.Content>
           </Card>
         )}
@@ -67,10 +69,20 @@ const Profile = () => {
             <CustomText bold fontSize='lg' style={{marginBottom: 10}}>Account Info</CustomText>
             <View style={{flexDirection: 'row'}}>
               <CustomText bold>Joined: </CustomText>
-              <CustomText>{userProfile?.createdAt.toDate().toLocaleDateString()}</CustomText>
+              <CustomText>
+                {userProfile?.createdAt 
+                  ? (userProfile.createdAt instanceof Date 
+                      ? userProfile.createdAt.toLocaleDateString()
+                      : userProfile.createdAt instanceof Timestamp
+                        ? userProfile.createdAt.toDate().toLocaleDateString()
+                        : 'Unknown')
+                  : 'Unknown'
+                }
+              </CustomText>
             </View>
           </Card.Content>
         </Card>
+        <CustomButton onPress={() => signOut()}>  Sign Out</CustomButton>
       </ScrollView>
     </Page>
   )

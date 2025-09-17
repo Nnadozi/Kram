@@ -23,14 +23,13 @@ const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
     // Validation using your validation utility
     const isEmailValid = validationRules.email(email);
-    const isPasswordValid = validationRules.password(password);
-    const isFormValid = isEmailValid && isPasswordValid;
+    const isFormValid = isEmailValid && password.length > 0;
 
     
   const { execute: signIn, isLoading, error } = useAsyncOperation({
     errorMessage: 'Failed to sign in. Please try again.',
     onSuccess: () => {
-      router.push('/(main)/Groups');
+      router.push('/(main)/(tabs)/Groups');
     },
     onError: (error) => {
       console.log(error);
@@ -45,10 +44,7 @@ const Signin = () => {
         Alert.alert('Invalid Email', 'Please enter a valid email address');
         return;
       }
-      if (!isPasswordValid) {
-        Alert.alert('Invalid Password', 'Please enter a valid password');
-        return;
-      }
+77
     }
     signIn(async () => {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
@@ -67,7 +63,7 @@ const Signin = () => {
           if (!profileData?.onboardingComplete) {
             router.replace('/(onboarding)/ProfileSetupOne')
           } else {
-            router.replace('/(main)/Groups')
+            router.replace('/(main)/(tabs)/Groups')
           }
         } else {
           // No profile exists, start onboarding
@@ -106,6 +102,9 @@ const Signin = () => {
           mode='outlined'
           placeholder='Password'
         />
+        <CustomText style={{marginVertical: 5}} textAlign='right' fontSize='xs' primary onPress={() => router.push('/(auth)/ForgotPassword')}>
+          Forgot Password
+          </CustomText>
       </View>
       <View style={{width: "100%", marginTop: 15, gap: 10}}>
         <CustomButton onPress={handleSignIn} disabled={!isFormValid || isLoading}>{isLoading ? 'Signing In...' : 'Sign In'}</CustomButton>
@@ -126,6 +125,7 @@ const Signin = () => {
             style={{borderWidth: 2, borderColor: colors.primary, borderRadius: 1000}}
           />
         </View>
+        <CustomText style={{marginTop: 20}} gray fontSize='sm' textAlign='center'>Don't have an account? <CustomText fontSize='sm' bold primary onPress={() => router.replace('/(auth)/SignUp')}>Sign Up</CustomText></CustomText>
       </View>   
     </Page>
   )

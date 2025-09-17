@@ -1,9 +1,4 @@
-Jules:
-- bug fixes
-- documentation
-- router layout
-- use of hooks and utils
-- simplify code / make it more concise
-- "Validation error", simplify this hook plz
-- embed or references
-
+Finish Auth
+- email verification
+- Google Auth
+- Apple Auth

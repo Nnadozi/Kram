@@ -13,7 +13,7 @@ const CustomButton = ({variant = "contained", width = "100%", ...props}: CustomB
     <Button
     {...props}
     mode={variant}
-    style={{borderColor: variant === "outlined" ? colors.primary : "transparent", width: width || "100%"}}
+    style={{borderColor: variant === "outlined" ? colors.primary : "transparent", width: width || "100%",}}
     labelStyle={{fontWeight: "bold"}}
     />
   )

@@ -60,7 +60,7 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
     onSuccess: (result: Group) => {
       Alert.alert('Success', 'Group created successfully!')
       router.push({
-        pathname:'/GroupDetail',
+        pathname:'/(main)/GroupDetail',
         params: {
           groupId: result.id
         }
@@ -106,7 +106,7 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
         id: groupId,
         name: groupName.trim(),
         description: groupDescription.trim(),
-        members: [userProfile],
+        members: [userProfile.uid], // Changed from [userProfile] to [userProfile.uid]
         subjects: selectedSubjects,
         meetups: [],
         createdBy: userProfile.uid,
@@ -122,7 +122,7 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
 
       await setDoc(groupRef, newGroupForFirestore)
 
-      const updatedGroups = [...(userProfile.groups || []), newGroupForArray]
+      const updatedGroups = [...(userProfile.groups || []), groupId] // Changed from newGroupForArray to groupId
       setUserProfile({
         groups: updatedGroups
       })

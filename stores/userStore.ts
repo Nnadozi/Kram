@@ -16,7 +16,7 @@ interface UserState {
   signOut: () => Promise<void>
   deleteAccount: () => Promise<void>
   setAuthUser: (user: User | null) => void
-  setUserProfile: (profile: Partial<UserProfile>) => void
+  setUserProfile: (profile: Partial<UserProfile> | null) => void
   initializeAuth: () => void
   clearError: () => void
   setLoading: (loading: boolean) => void
@@ -42,7 +42,7 @@ export const useUserStore = create<UserState>()(
             authError: null,
           })
           console.log('User signed out successfully')
-          router.replace('/(auth)/SignIn')
+          router.replace('/(onboarding)')
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to sign out'
           set({ 
@@ -100,7 +100,9 @@ export const useUserStore = create<UserState>()(
           authError: null
         })
       },
-      setUserProfile: (profile: Partial<UserProfile>) => {
+      setUserProfile: (profile: Partial<UserProfile> | null) => {
+      
+        
         // update user profile in firestore and local state
         const currentState = get()
         const updatedProfile = { ...currentState.userProfile, ...profile } as UserProfile      

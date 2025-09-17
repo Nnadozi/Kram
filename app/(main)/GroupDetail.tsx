@@ -4,6 +4,7 @@ import { db } from '@/firebase/firebaseConfig';
 import { useAsyncOperation } from '@/hooks/useAsyncOperation';
 import { useUserStore } from '@/stores/userStore';
 import { Group } from '@/types/Group';
+import { getFirebaseErrorMessage } from '@/util/firebaseErrors';
 import { router, useGlobalSearchParams } from 'expo-router';
 import { deleteDoc, doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
@@ -20,6 +21,10 @@ export default function GroupDetail() {
     onSuccess: (result: Group) => {
       setGroup(result);
     },
+    onError: (error) => {
+      const errorMessage = getFirebaseErrorMessage(error);
+      Alert.alert('Error', errorMessage);
+    },
     showErrorAlert: false
   });
 
@@ -28,8 +33,11 @@ export default function GroupDetail() {
       Alert.alert('Success', 'Group deleted successfully!');
       router.back();
     },
-    showErrorAlert: true,
-    errorMessage: 'Failed to delete group. Please try again.'
+    onError: (error) => {
+      const errorMessage = getFirebaseErrorMessage(error);
+      Alert.alert('Error', errorMessage);
+    },
+    showErrorAlert: false
   });
 
   const handleDeleteGroup = () => {
@@ -48,8 +56,8 @@ export default function GroupDetail() {
               // Delete from groups collection
               await deleteDoc(doc(db, 'groups', group.id));
               
-              // Remove from user's groups array
-              const updatedGroups = userProfile.groups.filter(g => g.id !== group.id);
+              // Remove from user's groups array (now contains IDs instead of objects)
+              const updatedGroups = userProfile.groups.filter(groupId => groupId !== group.id);
               setUserProfile({ groups: updatedGroups });
               
               return { success: true };

@@ -1,5 +1,4 @@
 import { FieldValue } from "firebase/firestore";
-import { Group } from "./Group";
 
 export type UserProfile = {
   uid: string;
@@ -12,7 +11,7 @@ export type UserProfile = {
   minors:string[]
   onboardingComplete: boolean;
   bio:string;
-  groups: Group[]
+  groups: string[] // Changed from Group[] to string[] (group IDs)
   avatar:any
   createdAt: FieldValue | Date;
   updatedAt: FieldValue | Date;

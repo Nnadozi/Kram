@@ -1,9 +1,8 @@
 import CustomText from '@/components/CustomText';
 import { auth, db } from '@/firebase/firebaseConfig';
 import { useUserStore } from '@/stores/userStore';
-import { UserProfile } from '@/types/UserProfile';
 import { router } from 'expo-router';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -19,15 +18,15 @@ export default function RootIndex() {
         try {
           const userDocRef = doc(db, 'users', user.uid);
           const userDoc = await getDoc(userDocRef);
-          
+
           if (userDoc.exists()) {
             const profileData = userDoc.data();
             setUserProfile(profileData);
-            
+
             if (!profileData?.onboardingComplete) {
               router.replace('/(onboarding)/ProfileSetupOne');
             } else {
-              router.replace('/(main)/Groups');
+              router.replace('/(main)/(tabs)/Groups');
             }
           } else {
             // No profile exists, start onboarding
@@ -38,15 +37,15 @@ export default function RootIndex() {
           router.replace('/(onboarding)/ProfileSetupOne');
         }
       } else {
-        // User is signed out - go to onboarding welcome page
-        setAuthUser(null as unknown as User);
-        setUserProfile(null as unknown as Partial<UserProfile>);
+        // User is signed out - clear state and go to onboarding welcome page
+        setAuthUser(null);
+        setUserProfile(null);
         router.replace('/(onboarding)');
       }
     });
 
     return unsubscribe;
-  }, [setAuthUser, setUserProfile]);
+  }, []);
 
   // Show loading screen while checking auth state
   return (

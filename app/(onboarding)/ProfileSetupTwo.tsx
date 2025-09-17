@@ -2,7 +2,9 @@ import CustomInput from '@/components/CustomInput'
 import CustomText from '@/components/CustomText'
 import OnboardingPage from '@/components/OnboardingPage'
 import { searchAcademicFields } from '@/constants/majorsMinors'
+import { createValidationConfig, useFormValidation } from '@/hooks/useFormValidation'
 import { useUserStore } from '@/stores/userStore'
+import { validationRules } from '@/util/validation'
 import { router } from 'expo-router'
 import { useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
@@ -34,13 +36,40 @@ const ProfileSetupTwo = () => {
     }
   }
 
+  // Form validation configuration using your validation hooks
+  const validationConfig = createValidationConfig.custom({
+    majors: {
+      rule: (value: string[]) => value.length > 0,
+      errorMessage: 'Please select at least one major'
+    },
+    bio: {
+      rule: validationRules.bio,
+      errorMessage: 'Bio must be less than 500 characters'
+    }
+  })
+
+  const { validateForm, showValidationAlert } = useFormValidation(validationConfig)
+
   const isFormValid = () => {
-    return selectedMajors.length > 0 && bio.trim().length > 0
+    return selectedMajors.length > 0 && validationRules.bio(bio)
   }
 
   const handleButtonPress = () => {
-    if (!isFormValid()) {
-      return
+    const formData = {
+      majors: selectedMajors,
+      bio: bio
+    }
+
+    if (!validateForm(formData)) {
+      // Show specific validation errors
+      if (selectedMajors.length === 0) {
+        showValidationAlert('majors')
+        return
+      }
+      if (!validationRules.bio(bio)) {
+        showValidationAlert('bio')
+        return
+      }
     }
 
     setUserProfile({

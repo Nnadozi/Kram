@@ -24,7 +24,7 @@ const MyGroup = ({ group }: MyGroupProps) => {
   
   return (
     <TouchableOpacity onPress={() => router.push({
-        pathname: '/GroupDetail',
+        pathname: '/(main)/GroupDetail',
         params: {
             groupId: group.id
         }

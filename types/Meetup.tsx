@@ -1,5 +1,4 @@
 import { Timestamp } from "firebase/firestore";
-import { UserProfile } from "./UserProfile";
 
 export interface Meetup {
   id: string;
@@ -12,7 +11,7 @@ export interface Meetup {
   createdAt: Timestamp | Date;
   updatedAt: Timestamp | Date;
   length: number;
-  attendees: UserProfile[];
+  attendees: string[]; // Changed from UserProfile[] to string[] (user IDs)
   groupId: string;
   createdBy: string;
   cancelled: boolean;
