@@ -1,9 +1,10 @@
-import { auth, db } from '@/firebase/firebaseConfig'
+import { auth } from '@/firebase/firebaseConfig'
+import { authService } from '@/services/authService'
+import { userService } from '@/services/userService'
 import { UserProfile } from '@/types/UserProfile'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
-import { User, deleteUser, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth'
-import { deleteDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { User, deleteUser, onAuthStateChanged } from 'firebase/auth'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
@@ -33,7 +34,8 @@ export const useUserStore = create<UserState>()(
       signOut: async () => {
         try {
           set({ isLoading: true, authError: null })
-          await firebaseSignOut(auth)
+          // Use authService instead of direct Firebase calls
+          await authService.signOut()
           set({
             authUser: null,
             isAuthenticated: false,
@@ -66,10 +68,11 @@ export const useUserStore = create<UserState>()(
             return
           }
           
-          const userDocRef = doc(db, 'users', user.uid)
-          await deleteDoc(userDocRef)
+          // Use userService to delete user document
+          await userService.deleteUserDocument(user.uid)
           console.log('User document deleted from Firestore')
           
+          // Delete from Firebase Auth (this still needs to be direct)
           await deleteUser(user)
           console.log('User deleted from Firebase Auth')
           
@@ -101,19 +104,22 @@ export const useUserStore = create<UserState>()(
         })
       },
       setUserProfile: (profile: Partial<UserProfile> | null) => {
-      
+        if (profile === null) {
+          set({ userProfile: null })
+          return
+        }
         
-        // update user profile in firestore and local state
+        // Update local state first for immediate UI response
         const currentState = get()
         const updatedProfile = { ...currentState.userProfile, ...profile } as UserProfile      
         set({ 
           userProfile: updatedProfile,
         })
+        
+        // Update in Firestore using userService
         const user = currentState.authUser
-        if (user) {
-          const userDocRef = doc(db, 'users', user.uid)
-          const profileWithTimestamp = { ...profile, updatedAt: serverTimestamp() }
-          updateDoc(userDocRef, profileWithTimestamp).then(() => {
+        if (user && profile) {
+          userService.updateUserProfile(user.uid, profile).then(() => {
             console.log('user profile updated successfully', profile)
           }).catch((error) => {
             console.error('error updating user profile', error)

@@ -2,6 +2,7 @@ import { FieldValue } from "firebase/firestore";
 
 export type UserProfile = {
   uid: string;
+  authType: string;
   firstName: string;
   lastName: string;
   email: string;

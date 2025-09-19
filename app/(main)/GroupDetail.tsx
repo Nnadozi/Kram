@@ -1,29 +1,39 @@
+import CustomButton from '@/components/CustomButton';
 import CustomText from '@/components/CustomText';
+import MeetupCreationModal from '@/components/MeetupCreationModal';
+import MeetupPreview from '@/components/MeetupPreview';
 import Page from '@/components/Page';
 import { db } from '@/firebase/firebaseConfig';
 import { useAsyncOperation } from '@/hooks/useAsyncOperation';
+import { groupService } from '@/services/groupService';
+import { meetupService } from '@/services/meetupService';
 import { useUserStore } from '@/stores/userStore';
 import { Group } from '@/types/Group';
+import { Meetup } from '@/types/Meetup';
+import { UserProfile } from '@/types/UserProfile';
+import { formatCreatedAt } from '@/util/dateUtils';
 import { getFirebaseErrorMessage } from '@/util/firebaseErrors';
 import { router, useGlobalSearchParams } from 'expo-router';
 import { deleteDoc, doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Alert, Button, StyleSheet, View } from 'react-native';
-import { Chip, useTheme } from 'react-native-paper';
+import { Alert, Button, ScrollView, StyleSheet, View } from 'react-native';
+import { Avatar, Chip, useTheme } from 'react-native-paper';
+
 
 export default function GroupDetail() {
   const { groupId } = useGlobalSearchParams();
   const [group, setGroup] = useState<Group | null>(null);
+  const [members, setMembers] = useState<UserProfile[]>([]);
+  const [meetups, setMeetups] = useState<Meetup[]>([]);
+  const [showCreateMeetupModal, setShowCreateMeetupModal] = useState(false);
   const { colors } = useTheme();
   const { userProfile, setUserProfile } = useUserStore();
 
-  const { execute: fetchGroup, isLoading } = useAsyncOperation({
-    onSuccess: (result: Group) => {
-      setGroup(result);
-    },
-    onError: (error) => {
-      const errorMessage = getFirebaseErrorMessage(error);
-      Alert.alert('Error', errorMessage);
+  const { execute: fetchGroupData, isLoading } = useAsyncOperation({
+    onSuccess: ({ group, members, meetups }) => {
+      setGroup(group);
+      setMembers(members);
+      setMeetups(meetups);
     },
     showErrorAlert: false
   });
@@ -69,111 +79,144 @@ export default function GroupDetail() {
   };
 
   useEffect(() => {
-    if (groupId) {
-      fetchGroup(async () => {
-        const groupDoc = await getDoc(doc(db, 'groups', groupId as string));
-        if (groupDoc.exists()) {
-          return { id: groupDoc.id, ...groupDoc.data() } as Group;
-        }
-        throw new Error('Group not found');
-      });
-    }
+    if (!groupId) return;
+
+    fetchGroupData(async () => {
+      const groupDoc = await getDoc(doc(db, 'groups', groupId as string));
+      if (!groupDoc.exists()) throw new Error('Group not found');
+
+      const groupData = { id: groupDoc.id, ...groupDoc.data() } as Group;
+
+      // Use the new utility functions
+      const [members, meetups] = await Promise.all([
+        groupService.getGroupMembers(groupData.id),
+        meetupService.getGroupMeetups(groupData.id)
+      ]);
+
+      return {
+        group: groupData,
+        members,
+        meetups
+      };
+    });
   }, [groupId]);
 
-  if (isLoading) {
-    return (
-      <Page style={styles.container}>
-        <CustomText gray>Loading group...</CustomText>
-      </Page>
-    );
-  }
+  if (isLoading) return <Page style={styles.container}><CustomText gray>Loading...</CustomText></Page>;
+  if (!group) return <Page style={styles.container}><CustomText gray>Group not found</CustomText><Button title="Back" onPress={() => router.back()} /></Page>;
 
-  if (!group) {
-    return (
-      <Page style={styles.container}>
-        <CustomText gray>Group not found</CustomText>
-        <Button title="Back" onPress={() => router.back()} />
-      </Page>
-    );
-  }
+  const MembersList = () => (
+    <View style={styles.section}>
+      <CustomText bold fontSize="lg" style={styles.sectionTitle}>Members ({members.length})</CustomText>
+      {members.map(member => (
+        <View key={member.uid} style={styles.memberRow}>
+          <Avatar.Text size={32} label={`${member.firstName?.[0] || ''}${member.lastName?.[0] || ''}`.toUpperCase() || 'U'} />
+          <CustomText fontSize="base">
+            {member.firstName} {member.lastName}
+            {member.uid === group.createdBy && <CustomText fontSize="base" style={{ color: colors.primary }}> (owner)</CustomText>}
+          </CustomText>
+        </View>
+      ))}
+      {members.length === 0 && <CustomText gray>No member details available</CustomText>}
+    </View>
+  );
+
+  const MeetupsList = () => (
+    <View style={styles.section}>
+      <CustomText bold fontSize="lg" style={styles.sectionTitle}>Meetups ({meetups.length})</CustomText>
+      {meetups.map(meetup => (
+        <MeetupPreview
+          key={meetup.id}
+          meetup={meetup}
+          onDelete={(meetupId: string) => {
+            // Remove the deleted meetup from the list
+            setMeetups(prev => prev.filter(m => m.id !== meetupId))
+          }}
+        />
+      ))}
+      {meetups.length === 0 && <CustomText gray>No meetups scheduled</CustomText>}
+    </View>
+  );
 
   return (
     <Page style={styles.container}>
-      <CustomText bold fontSize="xl" style={styles.title}>
-        {group.name}
-      </CustomText>
-      
-      <CustomText fontSize="base" style={styles.description}>
-        {group.description}
-      </CustomText>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20 }}>
+        <CustomText bold fontSize="xl" style={styles.title}>{group.name}</CustomText>
+        <CustomText fontSize="base" style={styles.description}>{group.description}</CustomText>
 
-      {/* Subjects */}
-      {group.subjects && group.subjects.length > 0 && (
+        <View style={styles.infoRow}>
+          <CustomText fontSize="base">📅 Created: <CustomText bold>{formatCreatedAt(group.createdAt)}</CustomText></CustomText>
+        </View>
+
+        {group.subjects?.length > 0 && (
+          <View style={styles.section}>
+            <CustomText bold fontSize="lg" style={styles.sectionTitle}>Subjects</CustomText>
+            <View style={styles.subjectsContainer}>
+              {group.subjects.map((subject, index) => (
+                <Chip key={index} style={[styles.subjectChip, { backgroundColor: colors.primaryContainer }]} textStyle={{ color: colors.onPrimaryContainer }}>
+                  {subject}
+                </Chip>
+              ))}
+            </View>
+          </View>
+        )}
+
+        <MembersList />
+        
+        {/* Meetups Section with Create Button */}
         <View style={styles.section}>
-          <CustomText bold fontSize="lg" style={styles.sectionTitle}>
-            Subjects
-          </CustomText>
-          <View style={styles.subjectsContainer}>
-            {group.subjects.map((subject, index) => (
-              <Chip
-                key={index}
-                style={[styles.subjectChip, { backgroundColor: colors.primaryContainer }]}
-                textStyle={{ color: colors.onPrimaryContainer }}
-              >
-                {subject}
-              </Chip>
-            ))}
+          <View style={styles.sectionHeader}>
+            <CustomButton
+              variant="outlined"
+              onPress={() => setShowCreateMeetupModal(true)}
+              style={styles.createMeetupButton}
+            >
+              + Create Meetup
+            </CustomButton>
           </View>
         </View>
-      )}
+        
+        <MeetupsList />
 
-      {/* Delete Button - Only show for group creator */}
-      {group && userProfile && group.createdBy === userProfile.uid && (
-        <View style={styles.buttonContainer}>
-          <Button 
-            title={isDeleting ? "Deleting..." : "Delete Group"} 
-            onPress={handleDeleteGroup}
-            color={colors.error}
-            disabled={isDeleting}
-          />
-        </View>
-      )}
+        {group.createdBy === userProfile?.uid && (
+          <Button title={isDeleting ? "Deleting..." : "Delete Group"} onPress={handleDeleteGroup} color={colors.error} disabled={isDeleting} />
+        )}
 
-      <Button title="Back" onPress={() => router.back()} />
+        <Button title="Back" onPress={() => router.back()} />
+      </ScrollView>
+
+      {/* Meetup Creation Modal */}
+      {group && (
+        <MeetupCreationModal
+          visible={showCreateMeetupModal}
+          onClose={() => setShowCreateMeetupModal(false)}
+          group={group}
+          onMeetupCreated={(newMeetup) => {
+            setMeetups(prev => [...prev, newMeetup])
+          }}
+        />
+      )}
     </Page>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    padding: 20,
-  },
-  title: {
-    marginBottom: 10,
-  },
-  description: {
-    marginBottom: 20,
-    lineHeight: 22,
-  },
-  section: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    marginBottom: 10,
-  },
-  subjectsContainer: {
+  container: { justifyContent: 'flex-start', alignItems: 'flex-start', padding: 20 },
+  title: { marginBottom: 10 },
+  description: { marginBottom: 20, lineHeight: 22 },
+  section: { width: '100%', marginBottom: 20 },
+  sectionTitle: { marginBottom: 10 },
+  sectionHeader: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  subjectChip: {
-    marginBottom: 4,
-  },
-  buttonContainer: {
-    marginTop: 20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 10,
   },
+  createMeetupButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+  },
+  infoRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 20 },
+  subjectsContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  subjectChip: { marginBottom: 4 },
+  memberRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 4 },
 });

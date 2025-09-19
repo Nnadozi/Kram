@@ -2,14 +2,11 @@ import CustomButton from '@/components/CustomButton';
 import CustomInput from '@/components/CustomInput';
 import CustomText from '@/components/CustomText';
 import Page from '@/components/Page';
-import { auth, db } from '@/firebase/firebaseConfig';
 import { useAsyncOperation } from '@/hooks/useAsyncOperation';
+import { authService } from '@/services/authService';
+import { userService } from '@/services/userService';
 import { useUserStore } from '@/stores/userStore';
-import { getFirebaseErrorMessage } from '@/util/firebaseErrors';
-import { validationRules } from '@/util/validation';
 import { router } from 'expo-router';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
@@ -21,54 +18,34 @@ const Signin = () => {
   const colors = useTheme().colors;
   const { setAuthUser, setUserProfile } = useUserStore();
   const [showPassword, setShowPassword] = useState(false);
-    // Validation using your validation utility
-    const isEmailValid = validationRules.email(email);
-    const isFormValid = isEmailValid && password.length > 0;
 
-    
-  const { execute: signIn, isLoading, error } = useAsyncOperation({
-    errorMessage: 'Failed to sign in. Please try again.',
-    onSuccess: () => {
-      router.push('/(main)/(tabs)/Groups');
-    },
+  const { execute: signIn, isLoading } = useAsyncOperation({
     onError: (error) => {
-      console.log(error);
-      const errorMessage = getFirebaseErrorMessage(error);
-      Alert.alert('Error Signing In', errorMessage);
+      Alert.alert('Error Signing In', error.message);
     }
   });
 
+  // Clean UI logic - validation and business logic now handled by service
   async function handleSignIn() {
-    if (!isFormValid) {
-      if (!isEmailValid) {
-        Alert.alert('Invalid Email', 'Please enter a valid email address');
-        return;
-      }
-77
-    }
     signIn(async () => {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      if (user) {
-        setAuthUser(user);
-      }
-        // Fetch user profile from Firestore
-        const userDocRef = doc(db, 'users', user.uid)
-        const userDoc = await getDoc(userDocRef)
+      const user = await authService.signIn(email, password);
+      setAuthUser(user);
+      
+      // Fetch user profile and handle navigation
+      const userProfile = await userService.getUserProfile(user.uid);
+      if (userProfile) {
+        setUserProfile(userProfile);
         
-        if (userDoc.exists()) {
-          const profileData = userDoc.data()
-          setUserProfile(profileData)
-          
-          // Navigate based on onboarding status
-          if (!profileData?.onboardingComplete) {
-            router.replace('/(onboarding)/ProfileSetupOne')
-          } else {
-            router.replace('/(main)/(tabs)/Groups')
-          }
+        // Navigate based on onboarding status
+        if (!userProfile.onboardingComplete) {
+          router.replace('/(onboarding)/ProfileSetupOne');
         } else {
-          // No profile exists, start onboarding
-          router.replace('/(onboarding)/ProfileSetupOne')
+          router.replace('/(main)/(tabs)/Groups');
         }
+      } else {
+        // No profile exists, start onboarding
+        router.replace('/(onboarding)/ProfileSetupOne');
+      }
     });
   }
 
@@ -102,12 +79,9 @@ const Signin = () => {
           mode='outlined'
           placeholder='Password'
         />
-        <CustomText style={{marginVertical: 5}} textAlign='right' fontSize='xs' primary onPress={() => router.push('/(auth)/ForgotPassword')}>
-          Forgot Password
-          </CustomText>
       </View>
       <View style={{width: "100%", marginTop: 15, gap: 10}}>
-        <CustomButton onPress={handleSignIn} disabled={!isFormValid || isLoading}>{isLoading ? 'Signing In...' : 'Sign In'}</CustomButton>
+        <CustomButton onPress={handleSignIn} disabled={isLoading}>{isLoading ? 'Signing In...' : 'Sign In'}</CustomButton>
         <CustomText gray fontSize='xs' textAlign='center'>or sign in with</CustomText>
         <View style={styles.row}>
           <IconButton
@@ -125,7 +99,6 @@ const Signin = () => {
             style={{borderWidth: 2, borderColor: colors.primary, borderRadius: 1000}}
           />
         </View>
-        <CustomText style={{marginTop: 20}} gray fontSize='sm' textAlign='center'>Don't have an account? <CustomText fontSize='sm' bold primary onPress={() => router.replace('/(auth)/SignUp')}>Sign Up</CustomText></CustomText>
       </View>   
     </Page>
   )

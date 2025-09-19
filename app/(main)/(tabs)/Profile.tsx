@@ -1,6 +1,7 @@
 import CustomButton from '@/components/CustomButton'
 import CustomText from '@/components/CustomText'
 import Page from '@/components/Page'
+import { useUserGroups } from '@/hooks/useUserGroups'
 import { useUserStore } from '@/stores/userStore'
 import { router } from 'expo-router'
 import { Timestamp } from 'firebase/firestore'
@@ -11,6 +12,7 @@ import { Avatar, Card, Icon, useTheme } from 'react-native-paper'
 const Profile = () => {
   const {colors} = useTheme();
   const {userProfile, signOut} = useUserStore();
+  const { groups: userGroups, loading: loadingGroups } = useUserGroups()
   
   return (
     <Page style={styles.container}>
@@ -59,8 +61,33 @@ const Profile = () => {
         {userProfile?.groups && userProfile.groups.length > 0 && (
           <Card style={styles.card}>
             <Card.Content>
-              <CustomText bold fontSize='lg' style={{marginBottom: 10}}>Groups</CustomText>
-              <CustomText  style={{flex: 1}}>{userProfile.groups.length} group(s) joined</CustomText>
+              <CustomText bold fontSize='lg' style={{marginBottom: 10}}>
+                Groups ({userProfile.groups.length})
+              </CustomText>
+              
+              {loadingGroups ? (
+                <CustomText gray>Loading groups...</CustomText>
+              ) : userGroups.length > 0 ? (
+                <View style={styles.groupsList}>
+                  {userGroups.map((group) => (
+                    <TouchableOpacity
+                      key={group.id}
+                      style={styles.groupItem}
+                      onPress={() => router.push(`/(main)/GroupDetail?groupId=${group.id}`)}
+                    >
+                      <View style={styles.groupInfo}>
+                        <CustomText bold fontSize="sm">{group.name}</CustomText>
+                        <CustomText fontSize="xs" gray numberOfLines={1}>
+                          {group.description}
+                        </CustomText>
+                      </View>
+                      <Icon source="chevron-right" size={20} color={colors.onSurfaceVariant} />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              ) : (
+                <CustomText gray>No groups found</CustomText>
+              )}
             </Card.Content>
           </Card>
         )}
@@ -117,5 +144,19 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 16,
     elevation: 2,
+  },
+  groupsList: {
+    gap: 8,
+  },
+  groupItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    borderRadius: 8,
+  },
+  groupInfo: {
+    flex: 1,
+    gap: 4,
   },
 })

@@ -1,4 +1,5 @@
 import CustomText from '@/components/CustomText'
+import MyGroup from '@/components/MyGroup'
 import Page from '@/components/Page'
 import { useUserStore } from '@/stores/userStore'
 import { useFocusEffect } from '@react-navigation/native'
@@ -8,7 +9,7 @@ import { Icon, useTheme } from 'react-native-paper'
 
 const Groups = () => {
   const { userProfile, setUserProfile } = useUserStore()
-  const groups = userProfile?.groups || []
+  const groupIds = userProfile?.groups || []
   const { colors } = useTheme()
 
   const clearGroups = () => {
@@ -18,22 +19,11 @@ const Groups = () => {
 
   useFocusEffect(
     useCallback(() => {
-      // This will run every time the screen comes into focus
-      // The groups will automatically update from the store
       console.log('Groups tab focused - refreshing groups list')
-      console.log('Current group IDs:', groups)
-    }, [groups])
+      console.log('Current group IDs:', groupIds)
+    }, [groupIds])
   )
 
-  const renderGroup = ({ item }: { item: string }) => {
-    if (!item) return null
-    // For now, just show the group ID until we fetch full group data
-    return (
-      <View style={{ padding: 10, backgroundColor: '#f0f0f0', margin: 5, borderRadius: 8 }}>
-        <CustomText>Group ID: {item}</CustomText>
-      </View>
-    )
-  }
 
   return (
     <Page style={{justifyContent: 'flex-start', alignItems: 'flex-start'}}>
@@ -43,7 +33,7 @@ const Groups = () => {
         </CustomText>
       </View>
       
-      {groups.length === 0 ? (
+      {groupIds.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Icon source='emoticon-sad' size={100} color="gray" />
           <CustomText bold fontSize='base' textAlign='center' gray>
@@ -55,8 +45,8 @@ const Groups = () => {
         </View>
       ) : (
         <FlatList
-          data={groups}
-          renderItem={renderGroup}
+          data={groupIds}
+          renderItem={({item}) => <MyGroup groupId={item} />}
           keyExtractor={(item) => item}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainer}
@@ -88,6 +78,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: 20,
-    paddingHorizontal: 8,
+    paddingHorizontal: 5,
   },
 })

@@ -2,14 +2,10 @@ import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import CustomText from '@/components/CustomText'
 import Page from '@/components/Page'
-import { auth, db } from '@/firebase/firebaseConfig'
 import { useAsyncOperation } from '@/hooks/useAsyncOperation'
+import { authService } from '@/services/authService'
 import { useUserStore } from '@/stores/userStore'
-import { getFirebaseErrorMessage } from '@/util/firebaseErrors'
-import { validationRules } from '@/util/validation'
 import { router } from 'expo-router'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
@@ -19,51 +15,22 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const colors = useTheme().colors;
-  const {setUserProfile, setAuthUser} = useUserStore()
+  const { setAuthUser } = useUserStore()
 
-  // Validation using your validation utility
-  const isEmailValid = validationRules.email(email);
-  const isPasswordValid = validationRules.password(password);
-  const isFormValid = isEmailValid && isPasswordValid;
-
-  const { execute: signUp, isLoading, error } = useAsyncOperation({
-    errorMessage: 'Failed to sign up. Please try again.',
+  const { execute: signUp, isLoading } = useAsyncOperation({
     onSuccess: () => {
-      router.push('/(onboarding)/ProfileSetupOne');
+      router.replace('/(onboarding)/ProfileSetupOne');
     },
     onError: (error) => {
-      const errorMessage = getFirebaseErrorMessage(error);
-      Alert.alert('Error Signing Up', errorMessage);
+      Alert.alert('Error Signing Up', error.message);
     }
   });
 
+  // Clean UI logic - validation and business logic now handled by service
   async function handleSignUp() {
-    // Validate form before proceeding
-    if (!isFormValid) {
-      if (!isEmailValid) {
-        Alert.alert('Invalid Email', 'Please enter a valid email address');
-        return;
-      }
-      if (!isPasswordValid) {
-        Alert.alert('Invalid Password', 'Password must be at least 8 characters long');
-        return;
-      }
-    }
-
-    // Create account in firebase, make user doc in firestore and then navigate to profile setup
     signUp(async () => {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      if (user) {
-        setAuthUser(user);
-        await setDoc(doc(db, 'users', user.uid), {
-          uid: user.uid,
-          email: user.email,
-          onboardingComplete: false,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        });
-        router.push('/(onboarding)/ProfileSetupOne');
-      }
+      const user = await authService.signUp(email, password);
+      setAuthUser(user);
     });
   }
   return (
@@ -102,7 +69,7 @@ const SignUp = () => {
       <View style={{width: "100%", marginTop: 15, gap: 10}}>
         <CustomButton 
           onPress={handleSignUp}
-          disabled={!isFormValid || isLoading}
+          disabled={isLoading}
         >
           {isLoading ? 'Signing Up...' : 'Sign Up'}
         </CustomButton>

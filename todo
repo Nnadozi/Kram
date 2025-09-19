@@ -1,4 +1,25 @@
 Finish Auth
-- email verification
-- Google Auth
-- Apple Auth
+- Social Auth
+- Email verification (must be school)
+- Forgot password
+- Reset password
+- New user? Sign up
+
+Other Stuff Remaining
+- User profile
+- Settings
+- Friend system?
+- Vidoe chat OR 3rd party platform
+- Google Maps API
+- Group chat
+
+Optimization
+- Reduc reads/writes
+- Caching
+- Custom hooks + utils
+- best practices
+
+Security
+- Firestore rules
+
+DUE: 10/1
