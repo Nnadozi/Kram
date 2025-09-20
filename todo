@@ -9,17 +9,22 @@ Other Stuff Remaining
 - User profile
 - Settings
 - Friend system?
-- Vidoe chat OR 3rd party platform
+- Video chat OR 3rd party platform
 - Google Maps API
 - Group chat
 
 Optimization
-- Reduc reads/writes
+- Reduce reads/writes
 - Caching
 - Custom hooks + utils
 - best practices
 
 Security
 - Firestore rules
+
+Background Agents
+- Activity indicator component (ex: signing in)
+- Bug fixes
+- Optimization
 
 DUE: 10/1
