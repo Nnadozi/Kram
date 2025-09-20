@@ -4,19 +4,19 @@ import { UserProfile } from '@/types/UserProfile'
 import { sortMeetupsByDate } from '@/util/dateUtils'
 import { validationRules } from '@/util/validation'
 import {
-    addDoc,
-    arrayRemove,
-    arrayUnion,
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    getDocs,
-    query,
-    serverTimestamp,
-    Timestamp,
-    updateDoc,
-    where
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  serverTimestamp,
+  Timestamp,
+  updateDoc,
+  where
 } from 'firebase/firestore'
 
 /**
@@ -185,16 +185,38 @@ export class MeetupService {
     }
 
     try {
+      // Business rule: Check if meetup is already full
+      const isFullMeetup = await this.isMeetupFull(meetupId)
+      if (isFullMeetup) {
+        throw new Error('This meetup is already full')
+      }
+
+      // Get current meetup data to check if user is already attending
       const meetupDocRef = doc(db, 'meetups', meetupId)
+      const meetupDoc = await getDoc(meetupDocRef)
       
-      // Business rule: Add attendee and update count
+      if (!meetupDoc.exists()) {
+        throw new Error('Meetup not found')
+      }
+
+      const meetupData = meetupDoc.data() as Meetup
+      
+      // Business rule: Don't allow duplicate attendance
+      if (meetupData.attendees?.includes(userId)) {
+        throw new Error('You are already attending this meetup')
+      }
+      
+      // Business rule: Add attendee and update timestamp
       await updateDoc(meetupDocRef, {
         attendees: arrayUnion(userId),
-        attendeeCount: arrayUnion(userId).length, // This will be calculated properly by Firestore
         updatedAt: serverTimestamp()
       })
     } catch (error) {
       console.error('Error joining meetup:', error)
+      // Re-throw the error with the original message if it's a business rule error
+      if (error instanceof Error && (error.message.includes('full') || error.message.includes('already attending'))) {
+        throw error
+      }
       throw new Error('Failed to join meetup. Please try again.')
     }
   }
@@ -297,9 +319,32 @@ export class MeetupService {
    * Checks if a meetup has reached capacity
    */
   async isMeetupFull(meetupId: string): Promise<boolean> {
-    // This would require fetching the meetup first
-    // For now, return false - implement when needed
-    return false
+    if (!meetupId) {
+      throw new Error('Meetup ID is required')
+    }
+
+    try {
+      const meetupDocRef = doc(db, 'meetups', meetupId)
+      const meetupDoc = await getDoc(meetupDocRef)
+
+      if (!meetupDoc.exists()) {
+        throw new Error('Meetup not found')
+      }
+
+      const meetupData = meetupDoc.data() as Meetup
+      
+      // If no maxAttendees is set, meetup is never full
+      if (!meetupData.maxAttendees) {
+        return false
+      }
+
+      // Check if current attendee count meets or exceeds the limit
+      const currentAttendeeCount = meetupData.attendees?.length || 0
+      return currentAttendeeCount >= meetupData.maxAttendees
+    } catch (error) {
+      console.error('Error checking if meetup is full:', error)
+      throw new Error('Failed to check meetup capacity')
+    }
   }
 
   /**

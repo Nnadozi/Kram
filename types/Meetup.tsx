@@ -12,8 +12,10 @@ export interface Meetup {
   updatedAt: Timestamp | Date;
   length: number;
   attendees: string[]; // Changed from UserProfile[] to string[] (user IDs)
+  attendeeCount?: number; // Number of current attendees (for optimization)
+  maxAttendees?: number; // Maximum number of attendees allowed
   groupId: string;
   createdBy: string;
   cancelled: boolean;
-
+  status?: 'upcoming' | 'ongoing' | 'completed' | 'cancelled'; // Meetup status
 }
