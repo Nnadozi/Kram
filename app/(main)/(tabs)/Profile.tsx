@@ -1,5 +1,6 @@
 import BioEditModal from '@/components/BioEditModal'
 import CustomButton from '@/components/CustomButton'
+import ActivityIndicator from '@/components/ActivityIndicator'
 import CustomText from '@/components/CustomText'
 import MajorsMinorsEditModal from '@/components/MajorsMinorsEditModal'
 import Page from '@/components/Page'
@@ -97,7 +98,10 @@ const Profile = () => {
               </CustomText>
               
               {loadingGroups ? (
-                <CustomText gray>Loading groups...</CustomText>
+                <ActivityIndicator 
+                  size="small" 
+                  message="Loading groups..." 
+                />
               ) : userGroups.length > 0 ? (
                 <View style={styles.groupsList}>
                   {userGroups.map((group) => (

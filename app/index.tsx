@@ -1,11 +1,11 @@
-import CustomText from '@/components/CustomText';
 import { auth } from '@/firebase/firebaseConfig';
 import { userService } from '@/services/userService';
 import { useUserStore } from '@/stores/userStore';
 import { router } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
+import ActivityIndicator from '@/components/ActivityIndicator';
 
 export default function RootIndex() {
   const { setAuthUser, setUserProfile } = useUserStore();
@@ -48,10 +48,10 @@ export default function RootIndex() {
   // Show loading screen while checking auth state
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-      <ActivityIndicator size="large" color="#007AFF" />
-      <CustomText style={{ marginTop: 16 }} fontSize="sm" gray>
-        Loading...
-      </CustomText>
+      <ActivityIndicator 
+        size="large" 
+        message="Loading..." 
+      />
     </View>
   );
 }

@@ -84,8 +84,10 @@ const MyGroup = ({ groupId }: MyGroupProps) => {
   if (isLoading || membersLoading || meetupsLoading) {
     return (
       <View style={[styles.container, { backgroundColor: colors.surface, justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size="small" color={colors.primary} />
-        <CustomText gray fontSize="sm">Loading group...</CustomText>
+        <ActivityIndicator 
+          size="small" 
+          message="Loading group..." 
+        />
       </View>
     )
   }

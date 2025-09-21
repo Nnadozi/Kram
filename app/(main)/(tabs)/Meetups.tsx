@@ -1,3 +1,4 @@
+import ActivityIndicator from '@/components/ActivityIndicator'
 import CustomText from '@/components/CustomText'
 import MeetupPreview from '@/components/MeetupPreview'
 import Page from '@/components/Page'
@@ -138,13 +139,22 @@ const Meetups = () => {
           )}
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <CustomText fontSize='lg' gray textAlign='center'>
-                {loading ? 'Loading meetups...' : `No ${filter === 'all' ? '' : filter + ' '}meetups found`}
-              </CustomText>
-              {!loading && filter !== 'all' && (
-                <CustomText fontSize='sm' gray textAlign='center' style={{ marginTop: 8 }}>
-                  Try changing the filter above
-                </CustomText>
+              {loading ? (
+                <ActivityIndicator 
+                  size="large"
+                  message="Loading meetups..."
+                />
+              ) : (
+                <>
+                  <CustomText fontSize='lg' gray textAlign='center'>
+                    {`No ${filter === 'all' ? '' : filter + ' '}meetups found`}
+                  </CustomText>
+                  {filter !== 'all' && (
+                    <CustomText fontSize='sm' gray textAlign='center' style={{ marginTop: 8 }}>
+                      Try changing the filter above
+                    </CustomText>
+                  )}
+                </>
               )}
             </View>
           }

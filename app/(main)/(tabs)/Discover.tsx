@@ -1,3 +1,4 @@
+import ActivityIndicator from '@/components/ActivityIndicator'
 import CustomInput from '@/components/CustomInput'
 import CustomText from '@/components/CustomText'
 import FilterModal from '@/components/FilterModal'
@@ -109,7 +110,11 @@ const Discover = () => {
       <CustomText bold style={{marginBottom: 10}} fontSize="sm" gray>{filteredGroups.length} group(s) found</CustomText>
 
       {isLoading ? (
-        <CustomText gray style={styles.loading}>Loading...</CustomText>
+        <ActivityIndicator 
+          size="large" 
+          message="Loading groups..." 
+          style={styles.loading}
+        />
       ) : (
         <FlatList
           data={filteredGroups}

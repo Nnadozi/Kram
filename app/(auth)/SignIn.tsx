@@ -1,4 +1,4 @@
-import CustomButton from '@/components/CustomButton';
+import LoadingButton from '@/components/LoadingButton';
 import CustomInput from '@/components/CustomInput';
 import CustomText from '@/components/CustomText';
 import Page from '@/components/Page';
@@ -81,7 +81,13 @@ const Signin = () => {
         />
       </View>
       <View style={{width: "100%", marginTop: 15, gap: 10}}>
-        <CustomButton onPress={handleSignIn} disabled={isLoading}>{isLoading ? 'Signing In...' : 'Sign In'}</CustomButton>
+        <LoadingButton 
+          onPress={handleSignIn}
+          loading={isLoading}
+          loadingText="Signing In..."
+        >
+          Sign In
+        </LoadingButton>
         <CustomText gray fontSize='xs' textAlign='center'>or sign in with</CustomText>
         <View style={styles.row}>
           <IconButton
