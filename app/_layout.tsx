@@ -1,10 +1,9 @@
-import { CustomLightTheme } from "@/constants/Colors";
-import { Stack } from 'expo-router';
-import { PaperProvider } from 'react-native-paper';
+import ThemeProvider from '@/components/ThemeProvider'
+import { Stack } from 'expo-router'
 
 export default function RootLayout() {
   return (
-    <PaperProvider theme={CustomLightTheme}>
+    <ThemeProvider>
       <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="(onboarding)" />
@@ -12,6 +11,6 @@ export default function RootLayout() {
         <Stack.Screen name="(main)" />
         <Stack.Screen name="(settings)" />
       </Stack>
-    </PaperProvider>
-  );
+    </ThemeProvider>
+  )
 }

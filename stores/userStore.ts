@@ -7,6 +7,7 @@ import { router } from 'expo-router'
 import { User, deleteUser, onAuthStateChanged } from 'firebase/auth'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { useThemeStore } from './themeStore'
 
 interface UserState {
   authUser: User | null
@@ -21,6 +22,8 @@ interface UserState {
   initializeAuth: () => void
   clearError: () => void
   setLoading: (loading: boolean) => void
+  getCurrentPrimaryColor: () => string
+  initializeUserProfile: (profile: UserProfile) => void
 }
 
 export const useUserStore = create<UserState>()(
@@ -102,6 +105,14 @@ export const useUserStore = create<UserState>()(
           isLoading: false,
           authError: null
         })
+        
+        // Initialize theme with user's avatar color if user is signed in
+        if (user) {
+          // This will be called after userProfile is loaded
+        } else {
+          // Reset to default theme when user signs out
+          useThemeStore.getState().updateTheme('rgb(255, 152, 0)')
+        }
       },
       setUserProfile: (profile: Partial<UserProfile> | null) => {
         if (profile === null) {
@@ -115,6 +126,11 @@ export const useUserStore = create<UserState>()(
         set({ 
           userProfile: updatedProfile,
         })
+        
+        // Update theme if avatar color changed
+        if (profile.avatar && profile.avatar !== currentState.userProfile?.avatar) {
+          useThemeStore.getState().updateTheme(profile.avatar)
+        }
         
         // Update in Firestore using userService
         const user = currentState.authUser
@@ -140,6 +156,17 @@ export const useUserStore = create<UserState>()(
       },
       setLoading: (loading: boolean) => {
         set({ isLoading: loading })
+      },
+      getCurrentPrimaryColor: () => {
+        const state = get()
+        return state.userProfile?.avatar || 'rgb(255, 152, 0)' // Default orange
+      },
+      initializeUserProfile: (profile: UserProfile) => {
+        set({ userProfile: profile })
+        // Initialize theme with user's avatar color
+        if (profile.avatar) {
+          useThemeStore.getState().updateTheme(profile.avatar)
+        }
       }
     }),
     {

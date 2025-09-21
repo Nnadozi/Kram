@@ -13,7 +13,7 @@ export type UserProfile = {
   onboardingComplete: boolean;
   bio:string;
   groups: string[] // Changed from Group[] to string[] (group IDs)
-  avatar:any
+  avatar: string; // User's chosen profile color for avatar and theme
   createdAt: FieldValue | Date;
   updatedAt: FieldValue | Date;
 }

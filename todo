@@ -6,9 +6,10 @@ Finish Auth
 - New user? Sign up
 
 Other Stuff Remaining
+- Include proper content on all screens
+- Firestore rules
 - User profile
 - Settings
-- Friend system?
 - Video chat OR 3rd party platform
 - Google Maps API
 - Group chat
@@ -19,12 +20,20 @@ Optimization
 - Custom hooks + utils
 - best practices
 
-Security
-- Firestore rules
-
 Background Agents
-- Activity indicator component (ex: signing in)
 - Bug fixes
 - Optimization
+- codebase security
 
 DUE: 10/1
+
+Future
+- Custom Avatars
+- Advanced scheduling/calendar sync
+- Gamification
+- File sharing
+- Payment features
+- (FUTURE ONBOARDING SCREEN)
+    Screen 5: Group Discovery Preview
+    Goal: Show immediate value by allowing users to view and join groups right away
+- Friend system?
