@@ -1,7 +1,6 @@
 import ActivityIndicator from '@/components/ActivityIndicator';
 import CustomButton from '@/components/CustomButton';
 import CustomText from '@/components/CustomText';
-import LoadingButton from '@/components/LoadingButton';
 import MeetupCreationModal from '@/components/MeetupCreationModal';
 import MeetupPreview from '@/components/MeetupPreview';
 import Page from '@/components/Page';
@@ -188,7 +187,7 @@ export default function GroupDetail() {
         <MeetupsList />
 
         {group.createdBy === userProfile?.uid && (
-          <LoadingButton 
+          <CustomButton 
             variant="contained" 
             onPress={handleDeleteGroup}
             loading={isDeleting}
@@ -196,7 +195,7 @@ export default function GroupDetail() {
             style={{ backgroundColor: colors.error }}
           >
             Delete Group
-          </LoadingButton>
+          </CustomButton>
         )}
 
         <Button title="Back" onPress={() => router.back()} />

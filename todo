@@ -13,6 +13,7 @@ Other Stuff Remaining
 - Video chat OR 3rd party platform
 - Google Maps API
 - Group chat
+- Notifications
 
 Optimization
 - Reduce reads/writes
@@ -37,3 +38,4 @@ Future
     Screen 5: Group Discovery Preview
     Goal: Show immediate value by allowing users to view and join groups right away
 - Friend system?
+- Course scraping for all 100+ schools? (not likely)

@@ -1,4 +1,3 @@
-import LoadingButton from '@/components/LoadingButton'
 import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import CustomText from '@/components/CustomText'
@@ -222,7 +221,7 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
           <View style={styles.buttonsContainer}>
 
 
-            <LoadingButton
+            <CustomButton
               variant="contained"
               onPress={handleCreateGroup}
               loading={isCreating}
@@ -231,7 +230,7 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
               style={styles.createButton}
             >
               Create Group
-            </LoadingButton>
+            </CustomButton>
             <CustomButton
               variant="outlined"
               onPress={handleClose}

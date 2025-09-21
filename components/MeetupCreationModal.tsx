@@ -1,4 +1,3 @@
-import LoadingButton from '@/components/LoadingButton'
 import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import CustomText from '@/components/CustomText'
@@ -319,7 +318,7 @@ const MeetupCreationModal = ({ visible, onClose, group, onMeetupCreated }: Meetu
 
           {/* Action Buttons */}
           <View style={styles.buttonsContainer}>
-            <LoadingButton
+            <CustomButton
               variant="contained"
               onPress={handleCreateMeetup}
               loading={isLoading}
@@ -328,7 +327,7 @@ const MeetupCreationModal = ({ visible, onClose, group, onMeetupCreated }: Meetu
               style={styles.createButton}
             >
               Create Meetup
-            </LoadingButton>
+            </CustomButton>
             
             <CustomButton
               variant="outlined"

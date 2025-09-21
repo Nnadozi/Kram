@@ -11,8 +11,8 @@ export default function TabsLayout() {
         headerShown: false, 
         tabBarActiveTintColor: colors.primary,
         tabBarStyle: {
-          alignSelf: 'center',
-          width: '92.6%',
+          position: 'absolute',
+          marginHorizontal: 20,
           bottom: 30,
           height: 60,
           backgroundColor: colors.background,
@@ -24,21 +24,11 @@ export default function TabsLayout() {
             height: 2,
           },
           shadowOpacity: 0.25,
+          borderTopWidth: 0,
           shadowRadius: 2,
-          elevation: 1.5,
+          elevation: 3,
         },
-        tabBarItemStyle: {
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        tabBarLabelStyle: {
-          fontSize: 11,
-          marginTop: 4,
-        },
-        tabBarIconStyle: {
-          marginTop: 0,
-        },
+        tabBarLabelStyle: {marginTop: 4, fontSize: 11},
       }}
     >   
       <Tabs.Screen 

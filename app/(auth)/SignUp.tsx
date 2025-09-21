@@ -1,6 +1,7 @@
-import LoadingButton from '@/components/LoadingButton'
+import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import CustomText from '@/components/CustomText'
+
 import Page from '@/components/Page'
 import { useAsyncOperation } from '@/hooks/useAsyncOperation'
 import { authService } from '@/services/authService'
@@ -67,13 +68,13 @@ const SignUp = () => {
         />
       </View>
       <View style={{width: "100%", marginTop: 15, gap: 10}}>
-        <LoadingButton 
+        <CustomButton 
           onPress={handleSignUp}
           loading={isLoading}
           loadingText="Creating Account..."
         >
           Sign Up
-        </LoadingButton>
+        </CustomButton>
         <CustomText gray fontSize='xs' textAlign='center'>or sign up with</CustomText>
         <View style={styles.row}>
           <IconButton

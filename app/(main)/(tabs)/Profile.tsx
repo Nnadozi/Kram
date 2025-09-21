@@ -1,6 +1,6 @@
+import ActivityIndicator from '@/components/ActivityIndicator'
 import BioEditModal from '@/components/BioEditModal'
 import CustomButton from '@/components/CustomButton'
-import ActivityIndicator from '@/components/ActivityIndicator'
 import CustomText from '@/components/CustomText'
 import MajorsMinorsEditModal from '@/components/MajorsMinorsEditModal'
 import Page from '@/components/Page'

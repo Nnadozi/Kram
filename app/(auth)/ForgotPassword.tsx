@@ -1,4 +1,4 @@
-import LoadingButton from '@/components/LoadingButton'
+import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import CustomText from '@/components/CustomText'
 import Page from '@/components/Page'
@@ -60,14 +60,14 @@ const ForgotPassword = () => {
       <View style={{width: '100%', marginBottom:15}}>
         <CustomInput autoCapitalize='none' label='Email' value={email} onChangeText={setEmail} mode='outlined' placeholder='Enter Email' />
       </View>
-      <LoadingButton 
+      <CustomButton 
         onPress={handleResetPassword} 
         disabled={!isEmailValid}
         loading={isLoading}
         loadingText="Sending Reset Email..."
       >
         Reset Password
-      </LoadingButton>
+      </CustomButton>
     </Page>
   )
 }
