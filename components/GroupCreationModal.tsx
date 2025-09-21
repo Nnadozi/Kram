@@ -1,3 +1,4 @@
+import LoadingButton from '@/components/LoadingButton'
 import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import CustomText from '@/components/CustomText'
@@ -221,14 +222,16 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
           <View style={styles.buttonsContainer}>
 
 
-            <CustomButton
+            <LoadingButton
               variant="contained"
               onPress={handleCreateGroup}
-              disabled={isCreating || !groupName.trim() || !groupDescription.trim() || selectedSubjects.length === 0}
+              loading={isCreating}
+              disabled={!groupName.trim() || !groupDescription.trim() || selectedSubjects.length === 0}
+              loadingText="Creating Group..."
               style={styles.createButton}
             >
-              {isCreating ? 'Creating...' : 'Create Group'}
-            </CustomButton>
+              Create Group
+            </LoadingButton>
             <CustomButton
               variant="outlined"
               onPress={handleClose}

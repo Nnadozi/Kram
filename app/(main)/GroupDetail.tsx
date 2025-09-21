@@ -1,5 +1,7 @@
+import ActivityIndicator from '@/components/ActivityIndicator';
 import CustomButton from '@/components/CustomButton';
 import CustomText from '@/components/CustomText';
+import LoadingButton from '@/components/LoadingButton';
 import MeetupCreationModal from '@/components/MeetupCreationModal';
 import MeetupPreview from '@/components/MeetupPreview';
 import Page from '@/components/Page';
@@ -101,7 +103,15 @@ export default function GroupDetail() {
     });
   }, [groupId]);
 
-  if (isLoading) return <Page style={styles.container}><CustomText gray>Loading...</CustomText></Page>;
+  if (isLoading) return (
+    <Page style={styles.container}>
+      <ActivityIndicator 
+        size="large" 
+        message="Loading group details..." 
+        style={{ marginTop: 50 }}
+      />
+    </Page>
+  );
   if (!group) return <Page style={styles.container}><CustomText gray>Group not found</CustomText><Button title="Back" onPress={() => router.back()} /></Page>;
 
   const MembersList = () => (
@@ -178,7 +188,15 @@ export default function GroupDetail() {
         <MeetupsList />
 
         {group.createdBy === userProfile?.uid && (
-          <Button title={isDeleting ? "Deleting..." : "Delete Group"} onPress={handleDeleteGroup} color={colors.error} disabled={isDeleting} />
+          <LoadingButton 
+            variant="contained" 
+            onPress={handleDeleteGroup}
+            loading={isDeleting}
+            loadingText="Deleting Group..."
+            style={{ backgroundColor: colors.error }}
+          >
+            Delete Group
+          </LoadingButton>
         )}
 
         <Button title="Back" onPress={() => router.back()} />

@@ -1,4 +1,5 @@
 import CustomButton from '@/components/CustomButton'
+import ActivityIndicator from '@/components/ActivityIndicator'
 import CustomText from '@/components/CustomText'
 import Page from '@/components/Page'
 import { useUserGroups } from '@/hooks/useUserGroups'
@@ -66,7 +67,10 @@ const Profile = () => {
               </CustomText>
               
               {loadingGroups ? (
-                <CustomText gray>Loading groups...</CustomText>
+                <ActivityIndicator 
+                  size="small" 
+                  message="Loading groups..." 
+                />
               ) : userGroups.length > 0 ? (
                 <View style={styles.groupsList}>
                   {userGroups.map((group) => (
