@@ -79,13 +79,13 @@ const Profile = () => {
             </View>
             <View style={{flexDirection: 'row', marginBottom: 10, flexWrap: 'wrap'}}>
               <CustomText bold  style={{marginRight: 8}}>Majors:</CustomText>
-              <CustomText  style={{flex: 1}}>{userProfile?.majors.join(', ')}</CustomText>
+              <CustomText  style={{flex: 1}}>{userProfile?.majors?.join(', ') || 'Not specified'}</CustomText>
             </View>
             
             {userProfile?.minors && userProfile.minors.length > 0 && (
               <View style={{flexDirection: 'row', marginBottom: 8, flexWrap: 'wrap'}}>
                 <CustomText bold>Minors: </CustomText>
-                <CustomText>{userProfile.minors.join(', ')}</CustomText>
+                <CustomText>{userProfile.minors?.join(', ') || 'Not specified'}</CustomText>
               </View>
             )}
           </Card.Content>

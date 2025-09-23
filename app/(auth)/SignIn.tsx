@@ -3,6 +3,7 @@ import CustomInput from '@/components/CustomInput';
 import CustomText from '@/components/CustomText';
 import Page from '@/components/Page';
 import { useAsyncOperation } from '@/hooks/useAsyncOperation';
+import { useEmailVerificationDeadline } from '@/hooks/useEmailVerificationDeadline';
 import { authService } from '@/services/authService';
 import { userService } from '@/services/userService';
 import { useUserStore } from '@/stores/userStore';
@@ -16,7 +17,8 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const colors = useTheme().colors;
-  const { setAuthUser, setUserProfile, pendingAccountDeletion, setPendingAccountDeletion, deleteAccount } = useUserStore();
+  const { setAuthUser, setUserProfile, pendingAccountDeletion, setPendingAccountDeletion, deleteAccount, clearEmailVerificationDeadline } = useUserStore();
+  const { shouldShowEmailVerification } = useEmailVerificationDeadline();
   const [showPassword, setShowPassword] = useState(false);
 
   const { execute: signIn, isLoading } = useAsyncOperation({
@@ -93,6 +95,18 @@ const Signin = () => {
       
       // Fetch user profile and handle navigation
       const userProfile = await userService.getUserProfile(user.uid);
+      
+      // Check email verification first
+      if (!user.emailVerified && shouldShowEmailVerification) {
+        router.replace('/(auth)/EmailVerification');
+        return;
+      }
+      
+      // If email is verified, clear any existing deadline
+      if (user.emailVerified) {
+        clearEmailVerificationDeadline();
+      }
+      
       if (userProfile) {
         setUserProfile(userProfile);
         
@@ -139,6 +153,7 @@ const Signin = () => {
           mode='outlined'
           placeholder='Password'
         />
+        <CustomText gray fontSize='xs' textAlign='right' onPress={() => router.push("/(auth)/ForgotPassword")}>Forgot Password?</CustomText>
       </View>
       <View style={{width: "100%", marginTop: 15, gap: 10}}>
         <CustomButton 
@@ -148,7 +163,7 @@ const Signin = () => {
         >
           Sign In
         </CustomButton>
-        <CustomText gray fontSize='xs' textAlign='center'>or sign in with</CustomText>
+        <CustomText primary fontSize='xs' textAlign='center'>or sign in with</CustomText>
         <View style={styles.row}>
           <IconButton
             icon="google"
@@ -166,6 +181,9 @@ const Signin = () => {
           />
         </View>
       </View>   
+      <CustomText style={{marginTop: 30}} gray fontSize='xs' textAlign='center'>New User? 
+        <CustomText fontSize='xs' primary bold onPress={() => router.replace("/(auth)/SignUp")}> Sign Up</CustomText>
+      </CustomText>
     </Page>
   )
 }

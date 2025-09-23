@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   deleteUser,
   signOut as firebaseSignOut,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   User
 } from 'firebase/auth'
@@ -79,6 +80,28 @@ export class AuthService {
     } catch (error) {
       console.error('Error signing out:', error)
       throw new Error('Failed to sign out. Please try again.')
+    }
+  }
+
+  /**
+   * Sends email verification to the current user
+   */
+  async sendEmailVerification(): Promise<void> {
+    try {
+      const user = auth.currentUser
+      if (!user) {
+        throw new Error('No authenticated user found')
+      }
+
+      if (user.emailVerified) {
+        throw new Error('Email is already verified')
+      }
+
+      await sendEmailVerification(user)
+    } catch (error) {
+      console.error('Error sending email verification:', error)
+      const errorMessage = getFirebaseErrorMessage(error)
+      throw new Error(errorMessage)
     }
   }
 

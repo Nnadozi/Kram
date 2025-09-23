@@ -16,9 +16,12 @@ interface UserState {
   authError: string | null
   userProfile: UserProfile | null
   pendingAccountDeletion: boolean
+  emailVerificationDeadline: number | null
   signOut: () => Promise<void>
   deleteAccount: () => Promise<void>
   setPendingAccountDeletion: (pending: boolean) => void
+  setEmailVerificationDeadline: (deadline: number | null) => void
+  clearEmailVerificationDeadline: () => void
   setAuthUser: (user: User | null) => void
   setUserProfile: (profile: Partial<UserProfile> | null) => void
   initializeAuth: () => void
@@ -26,6 +29,8 @@ interface UserState {
   setLoading: (loading: boolean) => void
   getCurrentPrimaryColor: () => string
   initializeUserProfile: (profile: UserProfile) => void
+  isEmailVerified: () => boolean
+  shouldShowEmailVerification: () => boolean
 }
 
 export const useUserStore = create<UserState>()(
@@ -37,6 +42,7 @@ export const useUserStore = create<UserState>()(
       authError: null,
       userProfile: null,
       pendingAccountDeletion: false,
+      emailVerificationDeadline: null,
       signOut: async () => {
         try {
           set({ isLoading: true, authError: null })
@@ -103,6 +109,12 @@ export const useUserStore = create<UserState>()(
       },
       setPendingAccountDeletion: (pending: boolean) => {
         set({ pendingAccountDeletion: pending })
+      },
+      setEmailVerificationDeadline: (deadline: number | null) => {
+        set({ emailVerificationDeadline: deadline })
+      },
+      clearEmailVerificationDeadline: () => {
+        set({ emailVerificationDeadline: null })
       },
       setAuthUser: (user: User | null) => {
         console.log('Auth state changed:', user ? 'User signed in' : 'User signed out')
@@ -174,6 +186,36 @@ export const useUserStore = create<UserState>()(
         if (profile.avatar) {
           useThemeStore.getState().updateTheme(profile.avatar)
         }
+      },
+      isEmailVerified: () => {
+        const state = get()
+        return state.authUser?.emailVerified || false
+      },
+      shouldShowEmailVerification: () => {
+        const state = get()
+        const now = Date.now()
+        
+        // If no user, don't show verification
+        if (!state.authUser) return false
+        
+        // If email is verified, don't show verification
+        if (state.authUser.emailVerified) {
+          return false
+        }
+        
+        // If no deadline set, set one (24 hours from now)
+        if (!state.emailVerificationDeadline) {
+          const deadline = now + (24 * 60 * 60 * 1000) // 24 hours
+          set({ emailVerificationDeadline: deadline })
+          return true
+        }
+        
+        // If deadline has passed, account should be deleted
+        if (now > state.emailVerificationDeadline) {
+          return false // Will trigger account deletion
+        }
+        
+        return true
       }
     }),
     {
@@ -183,6 +225,7 @@ export const useUserStore = create<UserState>()(
         authUser: state.authUser,
         isAuthenticated: state.isAuthenticated,
         userProfile: state.userProfile,
+        emailVerificationDeadline: state.emailVerificationDeadline,
       })
     }
   )

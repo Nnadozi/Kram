@@ -16,11 +16,12 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const colors = useTheme().colors;
-  const { setAuthUser } = useUserStore()
+  const { setAuthUser, setEmailVerificationDeadline } = useUserStore()
 
   const { execute: signUp, isLoading } = useAsyncOperation({
     onSuccess: () => {
-      router.replace('/(onboarding)/ProfileSetupOne');
+      // Redirect to email verification screen
+      router.replace('/(auth)/EmailVerification');
     },
     onError: (error) => {
       Alert.alert('Error Signing Up', error.message);
@@ -32,6 +33,13 @@ const SignUp = () => {
     signUp(async () => {
       const user = await authService.signUp(email, password);
       setAuthUser(user);
+
+      // Set verification deadline (24 hours from now)
+      const deadline = Date.now() + (24 * 60 * 60 * 1000);
+      setEmailVerificationDeadline(deadline);
+
+      // Send email verification after successful signup
+      await authService.sendEmailVerification();
     });
   }
   return (
@@ -48,7 +56,7 @@ const SignUp = () => {
       </View>
       <View style = {{width: "100%", marginTop: 5, gap: 5}}>
         <CustomInput
-          label="Email"
+          label="School Email"
           value={email} 
           onChangeText={setEmail}
           mode='outlined'
