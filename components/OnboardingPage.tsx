@@ -20,7 +20,7 @@ const OnboardingScreen = ({ title, description, progress, children, buttonTitle,
   return (
     <Page style={styles.container}>
         <View style={styles.topRow}>
-            <View style={[styles.progressContainer, { backgroundColor: 'lightgray' }]}>
+            <View style={[styles.progressContainer, { backgroundColor: colors.inverseOnSurface }]}>
                 <View style={[styles.progressBarFill, { width: `${progress * 100}%`, backgroundColor: colors.primary }]} />
             </View>
             <CustomText textAlign='center' bold fontSize='2xl'>{title}</CustomText>

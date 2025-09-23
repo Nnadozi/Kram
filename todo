@@ -1,20 +1,20 @@
-Todo:
-- Social Auth
-- Email verification (must be school)
+Todo (Ordered by priority):
 - Forgot password
 - Reset password
 - New user? Sign up
-- Firestore rules
-- Settings
-  - Language
-  - Notifications
-  - Account Settings
-  - Help and Support
-- Video chat OR 3rd party platform
-- Google Maps API?
-- Notification system
-- Make the UI look good
+- Email verification (must be school)
+- Social Auth
 - Censorship
+- Internet connection
+- Settings
+  - Account Settings
+  - Language
+  - Help and Support
+- Google Maps API (Choosing location)
+- Video chat OR 3rd party platform
+- Notifications system
+- Make the UI look good
+- Finalize firestore rules
 
 Background Agents
 - Bug fixes

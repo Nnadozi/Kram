@@ -8,6 +8,7 @@ import { validationRules } from '@/util/validation'
 import { router } from 'expo-router'
 import { useState } from 'react'
 import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 
 
 const ProfileSetupOne = () => {
@@ -18,7 +19,7 @@ const ProfileSetupOne = () => {
   const [showSchoolList, setShowSchoolList] = useState(false)
   const [graduationYear, setGraduationYear] = useState('')
   const { setUserProfile } = useUserStore()
-  
+  const colors = useTheme().colors
   const filteredSchools = searchColleges(schoolSearch)
   
   const handleSchoolSelect = (selectedSchool: string) => {
@@ -121,13 +122,13 @@ const ProfileSetupOne = () => {
             onFocus={() => setShowSchoolList(true)}
           />
           {showSchoolList && (
-            <View style={styles.schoolList}>
+            <View style={[styles.schoolList, { backgroundColor: colors.surface, borderColor: colors.outline }]}>
               <FlatList
                 data={filteredSchools.slice(0, 10)}
                 keyExtractor={(item) => item}
                 renderItem={({ item }) => (
                   <TouchableOpacity
-                    style={styles.schoolItem}
+                    style={[styles.schoolItem, { backgroundColor: colors.surface , borderColor: colors.outline}]}
                     onPress={() => handleSchoolSelect(item)}
                   >
                     <CustomText fontSize="sm">{item}</CustomText>
@@ -160,10 +161,7 @@ const styles = StyleSheet.create({
     top: 60,
     left: 0,
     right: 0,
-    backgroundColor: 'white',
-    borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
     zIndex: 1000,
     elevation: 5,
     shadowColor: '#000',
@@ -174,6 +172,5 @@ const styles = StyleSheet.create({
   schoolItem: {
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
   }
 })

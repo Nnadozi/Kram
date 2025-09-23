@@ -210,6 +210,7 @@ const ProfileSetupTwo = () => {
           style={styles.bioInput}
           multiline
           showCharCounter
+          returnKeyType='done'
         />
       </View>
     </OnboardingPage>

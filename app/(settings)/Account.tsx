@@ -28,15 +28,15 @@ const Account = () => {
       await deleteAccount()
       deleteModal.close()
     } catch (error) {
-      // Check if re-authentication is required
+      // Check if re-authentication is required due to expired session
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-      if (errorMessage.includes('sign in again') || errorMessage.includes('re-authenticate')) {
+      if (errorMessage.includes('session has expired') || errorMessage.includes('sign in again')) {
         deleteModal.close()
         
         // Show alert and navigate to sign-in
         Alert.alert(
-          'Re-authentication Required',
-          'For security reasons, please sign in again to delete your account.',
+          'Session Expired',
+          'Your session has expired. Please sign in again to delete your account.',
           [
             {
               text: 'Cancel',

@@ -38,7 +38,7 @@ const Signin = () => {
         // Show confirmation alert for account deletion
         Alert.alert(
           'Delete Account',
-          'You have successfully signed in. Do you want to proceed with deleting your account?',
+          'You have successfully signed in. Do you want to proceed with deleting your account? This action cannot be undone.',
           [
             {
               text: 'Cancel',
@@ -54,8 +54,35 @@ const Signin = () => {
               onPress: async () => {
                 try {
                   await deleteAccount();
+                  // Show success confirmation
+                  Alert.alert(
+                    'Account Deleted',
+                    'Your account has been successfully deleted.',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => {
+                          // Navigate to onboarding
+                          router.replace('/(onboarding)');
+                        }
+                      }
+                    ]
+                  );
                 } catch (error) {
                   console.error('Error deleting account after sign-in:', error);
+                  Alert.alert(
+                    'Error',
+                    'Failed to delete account. Please try again.',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => {
+                          // Navigate to main app
+                          router.replace('/(main)/(tabs)/Groups');
+                        }
+                      }
+                    ]
+                  );
                 }
               }
             }

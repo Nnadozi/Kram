@@ -96,6 +96,12 @@ export class AuthService {
       await deleteUser(user)
     } catch (error) {
       console.error('Error deleting account:', error)
+      
+      // Check if the error is due to expired session
+      if ((error as any)?.code === 'auth/requires-recent-login') {
+        throw new Error('Your session has expired. Please sign in again to delete your account.')
+      }
+      
       const errorMessage = getFirebaseErrorMessage(error)
       throw new Error(errorMessage)
     }
