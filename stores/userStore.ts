@@ -4,7 +4,7 @@ import { userService } from '@/services/userService'
 import { UserProfile } from '@/types/UserProfile'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
-import { User, deleteUser, onAuthStateChanged } from 'firebase/auth'
+import { User, onAuthStateChanged } from 'firebase/auth'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { useThemeStore } from './themeStore'
@@ -15,8 +15,10 @@ interface UserState {
   isLoading: boolean
   authError: string | null
   userProfile: UserProfile | null
+  pendingAccountDeletion: boolean
   signOut: () => Promise<void>
   deleteAccount: () => Promise<void>
+  setPendingAccountDeletion: (pending: boolean) => void
   setAuthUser: (user: User | null) => void
   setUserProfile: (profile: Partial<UserProfile> | null) => void
   initializeAuth: () => void
@@ -34,6 +36,7 @@ export const useUserStore = create<UserState>()(
       isLoading: true,
       authError: null,
       userProfile: null,
+      pendingAccountDeletion: false,
       signOut: async () => {
         try {
           set({ isLoading: true, authError: null })
@@ -71,12 +74,12 @@ export const useUserStore = create<UserState>()(
             return
           }
           
-          // Use userService to delete user document
+          // First, clean up user data in Firestore (groups, meetups, user document)
           await userService.deleteUserDocument(user.uid)
-          console.log('User document deleted from Firestore')
+          console.log('User data cleaned up from Firestore')
           
-          // Delete from Firebase Auth (this still needs to be direct)
-          await deleteUser(user)
+          // Then delete from Firebase Auth
+          await authService.deleteAccount()
           console.log('User deleted from Firebase Auth')
           
           set({
@@ -85,6 +88,7 @@ export const useUserStore = create<UserState>()(
             isLoading: false,
             userProfile: null,
             authError: null,
+            pendingAccountDeletion: false,
           })
           router.replace('/(onboarding)')
           console.log('Account deleted successfully')
@@ -96,6 +100,9 @@ export const useUserStore = create<UserState>()(
           })
           console.error('Error deleting account:', error)
         }
+      },
+      setPendingAccountDeletion: (pending: boolean) => {
+        set({ pendingAccountDeletion: pending })
       },
       setAuthUser: (user: User | null) => {
         console.log('Auth state changed:', user ? 'User signed in' : 'User signed out')

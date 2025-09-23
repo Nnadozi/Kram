@@ -171,6 +171,19 @@ export default function GroupDetail() {
 
         <MembersList />
         
+        {/* Group Chat Button - Only for members */}
+        {userProfile?.uid && group.members.includes(userProfile.uid) && (
+          <View style={styles.section}>
+            <CustomButton
+              variant="contained"
+              onPress={() => router.push(`/(main)/GroupChat?groupId=${groupId}`)}
+              style={styles.chatButton}
+            >
+              💬 Group Chat
+            </CustomButton>
+          </View>
+        )}
+        
         {/* Meetups Section with Create Button */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -216,6 +229,8 @@ export default function GroupDetail() {
   );
 }
 
+// DONE! Group chat button added for members only
+
 const styles = StyleSheet.create({
   container: { justifyContent: 'flex-start', alignItems: 'flex-start', padding: 20 },
   title: { marginBottom: 10 },
@@ -231,6 +246,10 @@ const styles = StyleSheet.create({
   createMeetupButton: {
     paddingHorizontal: 12,
     paddingVertical: 4,
+  },
+  chatButton: {
+    width: '100%',
+    marginBottom: 8,
   },
   infoRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 20 },
   subjectsContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },

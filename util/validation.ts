@@ -60,6 +60,7 @@ const getErrorMessage = (field: string): string => {
     groupDescription: 'Description must be 10-500 characters',
     meetupName: 'Meetup name must be 3-100 characters',
     meetupDescription: 'Description must be 10-1000 characters',
+    messageText: 'Message must be 1-1000 characters',
   };
   
   return messages[field] || 'Invalid input';
@@ -83,6 +84,7 @@ export const validationRules = {
   groupDescription: (value: string) => validateRequired(value) && validateMinLength(value, 10) && validateMaxLength(value, 500),
   meetupName: (value: string) => validateRequired(value) && validateMinLength(value, 3) && validateMaxLength(value, 100),
   meetupDescription: (value: string) => validateRequired(value) && validateMinLength(value, 10) && validateMaxLength(value, 1000),
+  messageText: (value: string) => validateRequired(value) && validateMinLength(value, 1) && validateMaxLength(value, 1000),
 };
 
 export default {

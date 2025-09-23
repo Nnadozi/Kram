@@ -1,22 +1,63 @@
 import CustomButton from '@/components/CustomButton'
 import CustomText from '@/components/CustomText'
+import DeleteAccountModal from '@/components/DeleteAccountModal'
 import Page from '@/components/Page'
+import { useModal } from '@/hooks/useModal'
 import { useUserStore } from '@/stores/userStore'
 import { router } from 'expo-router'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 import { IconButton, Switch } from 'react-native-paper'
 
 const Account = () => {
-  const { signOut } = useUserStore()
+  const { signOut, deleteAccount, isLoading, setPendingAccountDeletion } = useUserStore()
+  const deleteModal = useModal()
 
   const handleSignOut = () => {
     // TODO: Add confirmation dialog
     signOut()
   }
 
+  // DONE! Delete account functionality with simplified re-authentication flow
+
   const handleDeleteAccount = () => {
-    // TODO: Add confirmation dialog and delete account logic
-    console.log('Delete account pressed')
+    deleteModal.open()
+  }
+
+  const confirmDeleteAccount = async () => {
+    try {
+      await deleteAccount()
+      deleteModal.close()
+    } catch (error) {
+      // Check if re-authentication is required
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      if (errorMessage.includes('sign in again') || errorMessage.includes('re-authenticate')) {
+        deleteModal.close()
+        
+        // Show alert and navigate to sign-in
+        Alert.alert(
+          'Re-authentication Required',
+          'For security reasons, please sign in again to delete your account.',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel'
+            },
+            {
+              text: 'Sign In',
+              onPress: () => {
+                // Set flag to indicate account deletion is pending
+                setPendingAccountDeletion(true)
+                // Navigate to sign-in screen
+                router.push('/(auth)')
+              }
+            }
+          ]
+        )
+      } else {
+        // Other errors are handled in the store
+        console.error('Delete account error:', error)
+      }
+    }
   }
 
   return (
@@ -78,12 +119,20 @@ const Account = () => {
               variant="outlined" 
               onPress={handleDeleteAccount}
               style={[styles.actionButton, styles.deleteButton]}
+              disabled={isLoading}
             >
               Delete Account
             </CustomButton>
           </View>
         </View>
       </ScrollView>
+
+      <DeleteAccountModal
+        visible={deleteModal.visible}
+        onClose={deleteModal.close}
+        onConfirm={confirmDeleteAccount}
+        isLoading={isLoading}
+      />
     </Page>
   )
 }

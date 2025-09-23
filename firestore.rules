@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to read/write their own profile, and others to read basic info
+    match /users/{userId} {
+      // Users can read and write their own profile
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // Other authenticated users can read basic profile info (for attendee lists)
+      allow read: if request.auth != null;
+    }
+    
+    // Groups rules
+    match /groups/{groupId} {
+      // Anyone can read groups
+      allow read: if request.auth != null;
+      
+      // Anyone can create groups
+      allow create: if request.auth != null;
+      
+      // Only group creator can update/delete
+      allow update, delete: if request.auth != null && 
+        request.auth.uid == resource.data.createdBy;
+      
+      // Messages subcollection - only group members can read/write
+      match /messages/{messageId} {
+        allow read, write: if request.auth != null && 
+          request.auth.uid in get(/databases/$(database)/documents/groups/$(groupId)).data.members;
+      }
+    }
+    
+    // Meetups rules
+    match /meetups/{meetupId} {
+      // Anyone can read meetups
+      allow read: if request.auth != null;
+      
+      // Anyone can create meetups (they must set themselves as createdBy)
+      allow create: if request.auth != null && 
+        request.auth.uid == request.resource.data.createdBy;
+      
+      // Only meetup creator can update/delete
+      allow update, delete: if request.auth != null && 
+        request.auth.uid == resource.data.createdBy;
+    }
+  }
+}

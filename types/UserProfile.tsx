@@ -6,14 +6,14 @@ export type UserProfile = {
   firstName: string;
   lastName: string;
   email: string;
-  school:string
-  graduationYear:number;
-  majors:string[]
-  minors:string[]
+  school: string;
+  graduationYear: number;
+  majors: string[];
+  minors: string[];
   onboardingComplete: boolean;
-  bio:string;
-  groups: string[] // Changed from Group[] to string[] (group IDs)
-  avatar: string; // User's chosen profile color for avatar and theme
+  bio: string;
+  groups: string[]; 
+  avatar: string; 
   createdAt: FieldValue | Date;
   updatedAt: FieldValue | Date;
 }

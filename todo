@@ -1,34 +1,34 @@
-Finish Auth
+Todo:
 - Social Auth
 - Email verification (must be school)
 - Forgot password
 - Reset password
 - New user? Sign up
-
-Other Stuff Remaining
-- Include proper content on all screens
 - Firestore rules
-- User profile
 - Settings
+  - Language
+  - Notifications
+  - Account Settings
+  - Help and Support
 - Video chat OR 3rd party platform
-- Google Maps API
-- Group chat
-- Notifications
-
-Optimization
-- Reduce reads/writes
-- Caching
-- Custom hooks + utils
-- best practices
+- Google Maps API?
+- Notification system
+- Make the UI look good
+- Censorship
 
 Background Agents
 - Bug fixes
-- Optimization
 - codebase security
+- Optimization
+    - Reduce reads/writes
+    - Caching
+    - Custom hooks + utils
+    - best practices
 
 DUE: 10/1
 
 Future
+- publish? m
 - Custom Avatars
 - Advanced scheduling/calendar sync
 - Gamification
@@ -39,3 +39,4 @@ Future
     Goal: Show immediate value by allowing users to view and join groups right away
 - Friend system?
 - Course scraping for all 100+ schools? (not likely)
+- Expand tech stack

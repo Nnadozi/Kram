@@ -25,7 +25,7 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
   const [groupDescription, setGroupDescription] = useState('')
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([])
   const [subjectSearch, setSubjectSearch] = useState('')
-  const { userProfile, setUserProfile } = useUserStore()
+  const { userProfile, setUserProfile, authUser } = useUserStore()
   const { colors } = useTheme()
 
   const validationConfig = createValidationConfig.custom({
@@ -93,7 +93,9 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
       }
     }
 
-    if (!userProfile?.uid) {
+    // Check authentication - use authUser.uid as fallback if userProfile.uid is not available
+    const userId = userProfile?.uid || authUser?.uid
+    if (!userId) {
       Alert.alert('Error', 'User not authenticated')
       return
     }
@@ -106,10 +108,10 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
         id: groupId,
         name: groupName.trim(),
         description: groupDescription.trim(),
-        members: [userProfile.uid], // Changed from [userProfile] to [userProfile.uid]
+        members: [userId], // Use the userId we determined above
         subjects: selectedSubjects,
         meetups: [],
-        createdBy: userProfile.uid,
+        createdBy: userId,
         createdAt: new Date(), 
         updatedAt: new Date()   
       }
@@ -122,10 +124,13 @@ const GroupCreationModal = ({ visible, onClose }: GroupCreationModalProps) => {
 
       await setDoc(groupRef, newGroupForFirestore)
 
-      const updatedGroups = [...(userProfile.groups || []), groupId] // Changed from newGroupForArray to groupId
-      setUserProfile({
-        groups: updatedGroups
-      })
+      // Update user profile with new group if userProfile exists
+      if (userProfile) {
+        const updatedGroups = [...(userProfile.groups || []), groupId]
+        setUserProfile({
+          groups: updatedGroups
+        })
+      }
 
       return newGroupForArray
     })

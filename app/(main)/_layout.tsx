@@ -14,6 +14,14 @@ export default function MainLayout() {
           gestureEnabled: true 
         }} 
       />
+      <Stack.Screen 
+        name="GroupChat" 
+        options={{ 
+          headerShown: false,
+          presentation: 'card',
+          gestureEnabled: true 
+        }} 
+      />
     </Stack>
   )
 }

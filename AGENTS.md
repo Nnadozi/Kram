@@ -2,7 +2,7 @@
 
 ## Code Style
 
-- Test: Always comment DONE! at the end of every code completion
+- Test: Always say DONE! when you're done talking
 
 ## Architecture
 
@@ -15,5 +15,11 @@
 - Make sure to take advantage of my hooks in /hooks and utils in /util
 
 - NEVER put aciton buttons in a row
+  buttonContainer: {
+    flexDirection: 'row',
+    padding: 20,
+    gap: 12,
+  },
+DONT DO THIS
 
 - Keep the UI style consistent. Try to avoid using colors outside of the colors in my themes (Colors.tsx) unless absolutely necessary.

@@ -2,15 +2,16 @@ import { db } from '@/firebase/firebaseConfig'
 import { UserProfile } from '@/types/UserProfile'
 import { validationRules } from '@/util/validation'
 import {
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    getDocs,
-    query,
-    serverTimestamp,
-    updateDoc,
-    where
+  arrayRemove,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where,
+  writeBatch
 } from 'firebase/firestore'
 
 /**
@@ -147,7 +148,7 @@ export class UserService {
   }
 
   /**
-   * Deletes a user's document from Firestore
+   * Deletes a user's document from Firestore and removes them from all groups and meetups
    * This is used when deleting the entire user account
    */
   async deleteUserDocument(userId: string): Promise<void> {
@@ -156,8 +157,50 @@ export class UserService {
     }
 
     try {
+      // Get user profile to find all groups they're in
+      const userProfile = await this.getUserProfile(userId)
+      if (!userProfile) {
+        throw new Error('User profile not found')
+      }
+
+      const userGroups = userProfile.groups || []
+      
+      // Use batch operations for atomic updates
+      const batch = writeBatch(db)
+
+      // Remove user from all groups they're members of
+      for (const groupId of userGroups) {
+        const groupDocRef = doc(db, 'groups', groupId)
+        batch.update(groupDocRef, {
+          members: arrayRemove(userId),
+          updatedAt: serverTimestamp()
+        })
+      }
+
+      // Remove user from all meetups they're attending
+      // Query all meetups where user is in attendees array
+      const meetupsQuery = query(
+        collection(db, 'meetups'),
+        where('attendees', 'array-contains', userId)
+      )
+      const meetupsSnapshot = await getDocs(meetupsQuery)
+      
+      meetupsSnapshot.forEach((meetupDoc) => {
+        const meetupRef = doc(db, 'meetups', meetupDoc.id)
+        batch.update(meetupRef, {
+          attendees: arrayRemove(userId),
+          updatedAt: serverTimestamp()
+        })
+      })
+
+      // Delete user's own document
       const userDocRef = doc(db, 'users', userId)
-      await deleteDoc(userDocRef)
+      batch.delete(userDocRef)
+
+      // Commit all changes atomically
+      await batch.commit()
+      
+      console.log(`Successfully removed user ${userId} from ${userGroups.length} groups and ${meetupsSnapshot.size} meetups`)
     } catch (error) {
       console.error('Error deleting user document:', error)
       throw new Error('Failed to delete user data')

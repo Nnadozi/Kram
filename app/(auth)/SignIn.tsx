@@ -16,7 +16,7 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const colors = useTheme().colors;
-  const { setAuthUser, setUserProfile } = useUserStore();
+  const { setAuthUser, setUserProfile, pendingAccountDeletion, setPendingAccountDeletion, deleteAccount } = useUserStore();
   const [showPassword, setShowPassword] = useState(false);
 
   const { execute: signIn, isLoading } = useAsyncOperation({
@@ -30,6 +30,39 @@ const Signin = () => {
     signIn(async () => {
       const user = await authService.signIn(email, password);
       setAuthUser(user);
+      
+      // Check if account deletion is pending
+      if (pendingAccountDeletion) {
+        setPendingAccountDeletion(false);
+        
+        // Show confirmation alert for account deletion
+        Alert.alert(
+          'Delete Account',
+          'You have successfully signed in. Do you want to proceed with deleting your account?',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+              onPress: () => {
+                // Navigate to main app
+                router.replace('/(main)/(tabs)/Groups');
+              }
+            },
+            {
+              text: 'Delete Account',
+              style: 'destructive',
+              onPress: async () => {
+                try {
+                  await deleteAccount();
+                } catch (error) {
+                  console.error('Error deleting account after sign-in:', error);
+                }
+              }
+            }
+          ]
+        );
+        return;
+      }
       
       // Fetch user profile and handle navigation
       const userProfile = await userService.getUserProfile(user.uid);

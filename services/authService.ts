@@ -2,10 +2,11 @@ import { auth, db } from '@/firebase/firebaseConfig'
 import { getFirebaseErrorMessage } from '@/util/firebaseErrors'
 import { validationRules } from '@/util/validation'
 import {
-    createUserWithEmailAndPassword,
-    signOut as firebaseSignOut,
-    signInWithEmailAndPassword,
-    User
+  createUserWithEmailAndPassword,
+  deleteUser,
+  signOut as firebaseSignOut,
+  signInWithEmailAndPassword,
+  User
 } from 'firebase/auth'
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 
@@ -78,6 +79,25 @@ export class AuthService {
     } catch (error) {
       console.error('Error signing out:', error)
       throw new Error('Failed to sign out. Please try again.')
+    }
+  }
+
+  /**
+   * Deletes the current user's Firebase Auth account
+   * This should be called after cleaning up user data in Firestore
+   */
+  async deleteAccount(): Promise<void> {
+    try {
+      const user = auth.currentUser
+      if (!user) {
+        throw new Error('No authenticated user found')
+      }
+
+      await deleteUser(user)
+    } catch (error) {
+      console.error('Error deleting account:', error)
+      const errorMessage = getFirebaseErrorMessage(error)
+      throw new Error(errorMessage)
     }
   }
 

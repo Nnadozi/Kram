@@ -23,6 +23,7 @@
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
     "@types/uuid": "^10.0.0",
+    "date-fns": "^4.1.0",
     "expo": "^54.0.1",
     "expo-apple-authentication": "~8.0.7",
     "expo-blur": "~15.0.6",
