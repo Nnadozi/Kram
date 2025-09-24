@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>795011560935-fn7cte4kjm8u3muaoisd20oppa3cdu7o.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.795011560935-fn7cte4kjm8u3muaoisd20oppa3cdu7o</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>795011560935-63c32mkmn7bdtch7maqs63nlbeoui87k.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA4VmRSSlaF88BFFqZ-hRpDZ18WV1D7S-k</string>
+	<key>GCM_SENDER_ID</key>
+	<string>795011560935</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.kram.app</string>
+	<key>PROJECT_ID</key>
+	<string>connected-e23fd</string>
+	<key>STORAGE_BUCKET</key>
+	<string>connected-e23fd.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:795011560935:ios:2e03f9a0a28d53bd9f3942</string>
+</dict>
+</plist>

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "795011560935",
+    "project_id": "connected-e23fd",
+    "storage_bucket": "connected-e23fd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795011560935:android:81b0da2a5434e6c79f3942",
+        "android_client_info": {
+          "package_name": "com.kram.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795011560935-63c32mkmn7bdtch7maqs63nlbeoui87k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kram.app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "795011560935-npkt6vtq2osrp7r7qeqnbfl7i129oe35.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGHd-Qs-V2gklMfk2lE1HBl-eufGuJFt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795011560935-npkt6vtq2osrp7r7qeqnbfl7i129oe35.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "795011560935-fn7cte4kjm8u3muaoisd20oppa3cdu7o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kram.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
