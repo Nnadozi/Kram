@@ -21,5 +21,6 @@
     gap: 12,
   },
 DONT DO THIS
+Avoid putting thins in rows in general
 
 - Keep the UI style consistent. Try to avoid using colors outside of the colors in my themes (Colors.tsx) unless absolutely necessary.
