@@ -1,19 +1,18 @@
 Todo (Ordered by priority):
 - Social Auth
-- Censorship
-- Internet connection
 - Settings
-  - Account Settings
+  - Help and Support -> Feedback
   - Language
-  - Help and Support
 - Google Maps API (Choosing location)
 - Video chat OR 3rd party platform
 - Notifications system
-- Make the UI look good
+- Account Settings
 - Finalize firestore rules
+- Make the UI look good
 
 Background Agents
 - Bug fixes
+- Toast
 - codebase security
 - Optimization
     - Reduce reads/writes

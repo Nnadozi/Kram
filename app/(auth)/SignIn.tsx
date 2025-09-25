@@ -9,7 +9,7 @@ import { userService } from '@/services/userService';
 import { useUserStore } from '@/stores/userStore';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Platform, StyleSheet, View } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 
 
@@ -172,6 +172,7 @@ const Signin = () => {
             iconColor={colors.primary}
             style={{borderWidth: 2, borderColor: colors.primary, borderRadius: 1000}}
           />
+          {Platform.OS === 'ios' && (
           <IconButton
             icon="apple"
             onPress={() => {}}
@@ -179,6 +180,7 @@ const Signin = () => {
             iconColor={colors.primary}
             style={{borderWidth: 2, borderColor: colors.primary, borderRadius: 1000}}
           />
+          )}
         </View>
       </View>   
       <CustomText style={{marginTop: 30}} gray fontSize='xs' textAlign='center'>New User? 

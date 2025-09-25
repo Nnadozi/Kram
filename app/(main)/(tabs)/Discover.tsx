@@ -4,22 +4,26 @@ import CustomText from '@/components/CustomText'
 import FilterModal from '@/components/FilterModal'
 import GroupCreationModal from '@/components/GroupCreationModal'
 import GroupPreview from '@/components/GroupPreview'
+import { OfflineModal } from '@/components/OfflineModal'
 import Page from '@/components/Page'
 import { db } from '@/firebase/firebaseConfig'
 import { useAsyncOperation } from '@/hooks/useAsyncOperation'
+import { useNetworkCheck } from '@/hooks/useNetworkCheck'
 import { Group } from '@/types/Group'
 import { collection, getDocs, orderBy, query } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
 
 const Discover = () => {
   const { colors } = useTheme()
+  const { withNetworkCheck, showOfflineModal, closeOfflineModal, modalConfig } = useNetworkCheck()
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [allGroups, setAllGroups] = useState<Group[]>([])
   const [filteredGroups, setFilteredGroups] = useState<Group[]>([])
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   // Filter states
   const [sortBy, setSortBy] = useState<'name' | 'date' | 'members'>('name')
@@ -29,17 +33,41 @@ const Discover = () => {
     onSuccess: (groups: Group[]) => {
       setAllGroups(groups)
       setFilteredGroups(groups)
+      setIsRefreshing(false)
+    },
+    onError: () => {
+      setIsRefreshing(false)
     },
     showErrorAlert: true
   })
 
+  const loadGroups = async (): Promise<void> => {
+    await withNetworkCheck(
+      async () => {
+        return fetchGroups(async () => {
+          const q = query(collection(db, 'groups'), orderBy('createdAt', 'desc'))
+          const querySnapshot = await getDocs(q)
+          return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Group))
+        })
+      },
+      {
+        offlineTitle: 'Cannot Load Groups',
+        offlineMessage: 'You need an internet connection to discover groups. Please check your connection and try again.',
+        onRetry: () => {
+          loadGroups()
+        }
+      }
+    )
+  }
+
   useEffect(() => {
-    fetchGroups(async () => {
-      const q = query(collection(db, 'groups'), orderBy('createdAt', 'desc'))
-      const querySnapshot = await getDocs(q)
-      return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Group))
-    })
+    loadGroups()
   }, [])
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    await loadGroups()
+  }
 
   useEffect(() => {
     let filtered = [...allGroups]
@@ -105,7 +133,18 @@ const Discover = () => {
         style={{width: "100%"}}
         />  
         <IconButton icon="filter" onPress={() => setShowFilters(true)} />
-        <IconButton icon="plus" onPress={() => setShowCreateModal(true)} />
+        <IconButton icon="plus" onPress={() => {
+          withNetworkCheck(
+            async () => {
+              setShowCreateModal(true)
+              return Promise.resolve()
+            },
+            {
+              offlineTitle: 'Cannot Create Group',
+              offlineMessage: 'You need an internet connection to create a new group.'
+            }
+          )
+        }} />
       </View>
       <CustomText bold style={{marginBottom: 10}} fontSize="sm" gray>{filteredGroups.length} group(s) found</CustomText>
 
@@ -122,6 +161,14 @@ const Discover = () => {
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
           style={styles.list}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+              colors={[colors.primary]}
+              tintColor={colors.primary}
+            />
+          }
           ListEmptyComponent={<CustomText gray textAlign="center" style={styles.empty}>No groups found</CustomText>}
         />
       )}
@@ -137,6 +184,14 @@ const Discover = () => {
       />
 
       <GroupCreationModal visible={showCreateModal} onClose={() => setShowCreateModal(false)} />
+      
+      <OfflineModal
+        visible={showOfflineModal}
+        onClose={closeOfflineModal}
+        onRetry={modalConfig.onRetry}
+        title={modalConfig.title}
+        message={modalConfig.message}
+      />
     </Page>
   )
 }

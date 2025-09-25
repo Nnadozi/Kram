@@ -2,8 +2,10 @@ import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import CustomText from '@/components/CustomText'
 import Message from '@/components/Message'
+import { OfflineModal } from '@/components/OfflineModal'
 import Page from '@/components/Page'
 import { useAsyncOperation } from '@/hooks/useAsyncOperation'
+import { useNetworkCheck } from '@/hooks/useNetworkCheck'
 import { messageService } from '@/services/messageService'
 import { useUserStore } from '@/stores/userStore'
 import { Message as MessageType } from '@/types/Message'
@@ -15,6 +17,7 @@ import { IconButton, useTheme } from 'react-native-paper'
 const GroupChat = () => {
   const { groupId } = useLocalSearchParams<{ groupId: string }>()
   const { colors } = useTheme()
+  const { withNetworkCheck, showOfflineModal, closeOfflineModal, modalConfig } = useNetworkCheck()
   const { authUser, userProfile } = useUserStore()
   const [messages, setMessages] = useState<MessageType[]>([])
   const [newMessage, setNewMessage] = useState('')
@@ -73,17 +76,29 @@ const GroupChat = () => {
     }
 
     const messageText = newMessage.trim()
-    setNewMessage('')
-
-    sendMessage(async () => {
-      await messageService.sendMessage(
-        groupId,
-        authUser.uid,
-        `${userProfile.firstName} ${userProfile.lastName}`,
-        messageText
-      )
-      // Real-time listener will automatically update the messages
-    })
+    
+    withNetworkCheck(
+      async () => {
+        setNewMessage('')
+        return sendMessage(async () => {
+          await messageService.sendMessage(
+            groupId,
+            authUser.uid,
+            `${userProfile.firstName} ${userProfile.lastName}`,
+            messageText
+          )
+          // Real-time listener will automatically update the messages
+        })
+      },
+      {
+        offlineTitle: 'Cannot Send Message',
+        offlineMessage: 'You need an internet connection to send messages. Please check your connection and try again.',
+        onRetry: () => {
+          // Message text is preserved, user can retry
+          handleSendMessage()
+        }
+      }
+    )
   }
 
   const handleDeleteMessage = (messageId: string) => {
@@ -181,6 +196,14 @@ const GroupChat = () => {
           </CustomButton>
         </View>
       </KeyboardAvoidingView>
+      
+      <OfflineModal
+        visible={showOfflineModal}
+        onClose={closeOfflineModal}
+        onRetry={modalConfig.onRetry}
+        title={modalConfig.title}
+        message={modalConfig.message}
+      />
     </Page>
   )
 }

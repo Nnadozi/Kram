@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "795011560935",
+    "project_id": "connected-e23fd",
+    "storage_bucket": "connected-e23fd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795011560935:android:906118a3941ffc079f3942",
+        "android_client_info": {
+          "package_name": "com.kram.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795011560935-npkt6vtq2osrp7r7qeqnbfl7i129oe35.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGHd-Qs-V2gklMfk2lE1HBl-eufGuJFt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795011560935-npkt6vtq2osrp7r7qeqnbfl7i129oe35.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "795011560935-7r03ptfcimbvjeqnec74lj0cj48avumv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nnadozi.Sumitt"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795011560935:android:90c6e7c7bcc23fc39f3942",
+        "android_client_info": {
+          "package_name": "com.kram.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795011560935-e62o821d76nunu0moe69bt1aqv2aunvb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kram.dev",
+            "certificate_hash": "96d53ba2ae646b392a318d0a3d564b1688ed16b3"
+          }
+        },
+        {
+          "client_id": "795011560935-npkt6vtq2osrp7r7qeqnbfl7i129oe35.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGHd-Qs-V2gklMfk2lE1HBl-eufGuJFt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795011560935-npkt6vtq2osrp7r7qeqnbfl7i129oe35.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "795011560935-7r03ptfcimbvjeqnec74lj0cj48avumv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nnadozi.Sumitt"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
