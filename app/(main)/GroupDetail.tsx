@@ -4,7 +4,7 @@ import CustomText from '@/components/CustomText';
 import MeetupCreationModal from '@/components/MeetupCreationModal';
 import MeetupPreview from '@/components/MeetupPreview';
 import Page from '@/components/Page';
-import { db } from '@/firebase/firebaseConfig';
+import { db } from '@/firebaseConfig';
 import { useAsyncOperation } from '@/hooks/useAsyncOperation';
 import { groupService } from '@/services/groupService';
 import { meetupService } from '@/services/meetupService';

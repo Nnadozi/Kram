@@ -1,6 +1,6 @@
 import CustomButton from '@/components/CustomButton'
 import CustomText from '@/components/CustomText'
-import { db } from '@/firebase/firebaseConfig'
+import { db } from '@/firebaseConfig'
 import { useAsyncOperation } from '@/hooks/useAsyncOperation'
 import { useUserStore } from '@/stores/userStore'
 import { Group } from '@/types/Group'

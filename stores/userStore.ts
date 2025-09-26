@@ -1,4 +1,4 @@
-import { auth } from '@/firebase/firebaseConfig'
+import { auth } from '@/firebaseConfig'
 import { authService } from '@/services/authService'
 import { userService } from '@/services/userService'
 import { UserProfile } from '@/types/UserProfile'

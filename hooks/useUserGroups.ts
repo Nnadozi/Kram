@@ -1,4 +1,4 @@
-import { db } from '@/firebase/firebaseConfig'
+import { db } from '@/firebaseConfig'
 import { useUserStore } from '@/stores/userStore'
 import { Group } from '@/types/Group'
 import { doc, getDoc } from 'firebase/firestore'

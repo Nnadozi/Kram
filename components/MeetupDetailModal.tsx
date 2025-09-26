@@ -1,7 +1,7 @@
 import CustomButton from '@/components/CustomButton'
 import CustomText from '@/components/CustomText'
 import Page from '@/components/Page'
-import { db } from '@/firebase/firebaseConfig'
+import { db } from '@/firebaseConfig'
 import { useAsyncOperation } from '@/hooks/useAsyncOperation'
 import { meetupService } from '@/services/meetupService'
 import { Meetup } from '@/types/Meetup'

@@ -1,7 +1,7 @@
 import CustomText from '@/components/CustomText'
 import { AppearanceMode, useThemeStore } from '@/stores/themeStore'
 import { Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
+import { IconButton, RadioButton, useTheme } from 'react-native-paper'
 
 interface AppearanceModalProps {
   visible: boolean
@@ -21,59 +21,54 @@ const AppearanceModal = ({ visible, onClose }: AppearanceModalProps) => {
     <Modal
       visible={visible}
       transparent
-      animationType="fade"
+      animationType="slide"
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        <View style={[styles.container, { backgroundColor: colors.surface }]}>
-          <View style={styles.header}>
-            <CustomText bold fontSize='lg'>Appearance</CustomText>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <CustomText bold fontSize='lg'>×</CustomText>
-            </TouchableOpacity>
-          </View>
-
+        <View style={[styles.container, { backgroundColor: colors.surface}]}>
           <View style={styles.content}>
-            <CustomText fontSize='base' style={styles.sectionTitle}>Theme</CustomText>
+            <View style={[styles.header, {borderBottomColor: colors.outlineVariant}]}>
+              <CustomText bold fontSize='lg' >Choose Theme</CustomText>
+              <IconButton icon='close' size={20} onPress={onClose} />
+            </View>
             
-            <TouchableOpacity 
-              style={styles.option}
-              onPress={() => handleThemeSelect('light')}
+            <RadioButton.Group 
+              onValueChange={(value) => handleThemeSelect(value as AppearanceMode)}
+              value={appearanceMode}
             >
-              <View style={styles.optionContent}>
-                <CustomText>Light</CustomText>
-                <CustomText fontSize='sm' gray>Always use light theme</CustomText>
-              </View>
-              <View style={[styles.radioButton, { borderColor: appearanceMode === 'light' ? colors.primary : colors.outline }]}>
-                <View style={[styles.radioInner, { backgroundColor: appearanceMode === 'light' ? colors.primary : 'transparent' }]} />
-              </View>
-            </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.option}
+                onPress={() => handleThemeSelect('light')}
+              >
+                <View style={styles.optionContent}>
+                  <CustomText>Light</CustomText>
+                  <CustomText fontSize='sm' gray>Always use light theme</CustomText>
+                </View>
+                <RadioButton value="light" />
+              </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={styles.option}
-              onPress={() => handleThemeSelect('dark')}
-            >
-              <View style={styles.optionContent}>
-                <CustomText>Dark</CustomText>
-                <CustomText fontSize='sm' gray>Always use dark theme</CustomText>
-              </View>
-              <View style={[styles.radioButton, { borderColor: appearanceMode === 'dark' ? colors.primary : colors.outline }]}>
-                <View style={[styles.radioInner, { backgroundColor: appearanceMode === 'dark' ? colors.primary : 'transparent' }]} />
-              </View>
-            </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.option}
+                onPress={() => handleThemeSelect('dark')}
+              >
+                <View style={styles.optionContent}>
+                  <CustomText>Dark</CustomText>
+                  <CustomText fontSize='sm' gray>Always use dark theme</CustomText>
+                </View>
+                <RadioButton value="dark" />
+              </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={styles.option}
-              onPress={() => handleThemeSelect('system')}
-            >
-              <View style={styles.optionContent}>
-                <CustomText>System</CustomText>
-                <CustomText fontSize='sm' gray>Follow system setting</CustomText>
-              </View>
-              <View style={[styles.radioButton, { borderColor: appearanceMode === 'system' ? colors.primary : colors.outline }]}>
-                <View style={[styles.radioInner, { backgroundColor: appearanceMode === 'system' ? colors.primary : 'transparent' }]} />
-              </View>
-            </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.option}
+                onPress={() => handleThemeSelect('system')}
+              >
+                <View style={styles.optionContent}>
+                  <CustomText>System</CustomText>
+                  <CustomText fontSize='sm' gray>Follow system setting</CustomText>
+                </View>
+                <RadioButton value="system" />
+              </TouchableOpacity>
+            </RadioButton.Group>
           </View>
         </View>
       </View>
@@ -86,59 +81,31 @@ export default AppearanceModal
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
     justifyContent: 'flex-end',
   },
   container: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingBottom: 34,
-    maxHeight: '80%',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  closeButton: {
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingBottom: 20,
   },
   content: {
-    padding: 20,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-    color: '#666',
+    padding:20,
   },
   option: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    paddingVertical: 12.5,
   },
   optionContent: {
     flex: 1,
   },
-  radioButton: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 16,
-  },
-  radioInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center', 
+    marginBottom: 10,
+    borderBottomWidth: 1,
   },
 })

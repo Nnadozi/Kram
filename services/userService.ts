@@ -1,4 +1,4 @@
-import { db } from '@/firebase/firebaseConfig'
+import { db } from '@/firebaseConfig'
 import { UserProfile } from '@/types/UserProfile'
 import { validationRules } from '@/util/validation'
 import {

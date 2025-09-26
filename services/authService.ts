@@ -1,4 +1,4 @@
-import { auth, db } from '@/firebase/firebaseConfig'
+import { auth, db } from '@/firebaseConfig'
 import { getFirebaseErrorMessage } from '@/util/firebaseErrors'
 import { validationRules } from '@/util/validation'
 import {

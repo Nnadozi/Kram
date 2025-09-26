@@ -1,4 +1,4 @@
-import { db } from '@/firebase/firebaseConfig'
+import { db } from '@/firebaseConfig'
 import { Meetup } from '@/types/Meetup'
 import { UserProfile } from '@/types/UserProfile'
 import { sortMeetupsByDate } from '@/util/dateUtils'

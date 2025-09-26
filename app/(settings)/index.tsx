@@ -6,7 +6,39 @@ import { useModal } from '@/hooks/useModal'
 import { useThemeStore } from '@/stores/themeStore'
 import { router } from 'expo-router'
 import { Linking, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { IconButton } from 'react-native-paper'
+import { IconButton, useTheme } from 'react-native-paper'
+import app from '../../app.config'
+
+interface SettingItemProps {
+  title: string
+  icon?: string
+  subtitle?: string
+  iconName?: string
+  rightContent?: string
+  onPress?: () => void
+}
+
+const SettingItem = ({ title, icon, iconName = 'chevron-right', rightContent, onPress }: SettingItemProps) => {
+  const {colors} = useTheme();
+  return (
+    <TouchableOpacity 
+      style={[styles.settingItem, {borderBottomColor:colors.outlineVariant}]} 
+      onPress={onPress}
+      disabled={!onPress}
+      activeOpacity={onPress ? 0.5 : 1}
+    >
+      <View style={styles.settingItemLeft}>
+        {icon && <IconButton iconColor={colors.inverseSurface} icon={icon} size={20} />}
+        <CustomText>{title}</CustomText>
+      </View>
+      {rightContent ? (
+        <CustomText style={{paddingVertical: 15,alignSelf: 'center', justifyContent: 'center'}} fontSize='sm' gray>{rightContent}</CustomText>
+      ) : (
+        <IconButton iconColor={colors.inverseSurface} icon={iconName} size={20} />
+      )}
+    </TouchableOpacity>
+  )
+}
 
 const Settings = () => {
   const appearanceModal = useModal()
@@ -35,60 +67,47 @@ const Settings = () => {
   return (
     <Page style={{alignItems: 'flex-start', justifyContent: 'flex-start'}}>
       <View style={styles.topContainer}>
-        <IconButton onPress={() => router.back()} icon='chevron-left' size={20} />
-        <CustomText bold fontSize='lg'>Settings</CustomText>
+        <IconButton onPress={() => router.back()} icon='arrow-left' size={20} />
+        <CustomText bold fontSize='2xl'>Settings</CustomText>
+        {/** Empty view to push the text to the center */}
+        <View style={{width: "10%"}}/>
       </View>
-
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.section}>
-          <CustomText bold fontSize='lg' style={styles.sectionTitle}>Preferences</CustomText>
-          
-          <TouchableOpacity style={styles.settingItem} onPress={appearanceModal.open}>
-            <View style={styles.settingItemContent}>
-              <CustomText>Appearance</CustomText>
-              <CustomText fontSize='sm' gray>{getAppearanceDisplayText(appearanceMode)}</CustomText>
-            </View>
-            <IconButton icon='chevron-right' size={20} />
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.settingItem} onPress={languageModal.open}>
-            <CustomText>Language</CustomText>
-            <IconButton icon='chevron-right' size={20} />
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.settingItem} onPress={() => handleNavigateToScreen('Notifications')}>
-            <CustomText>Notifications</CustomText>
-            <IconButton icon='chevron-right' size={20} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.section}>
-          <CustomText bold fontSize='lg' style={styles.sectionTitle}>Account</CustomText>
-          
-          <TouchableOpacity style={styles.settingItem} onPress={() => handleNavigateToScreen('Account')}>
-            <CustomText>Account Settings</CustomText>
-            <IconButton icon='chevron-right' size={20} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.section}>
-          <CustomText bold fontSize='lg' style={styles.sectionTitle}>Support</CustomText>
-          
-          <TouchableOpacity style={styles.settingItem} onPress={() => handleNavigateToScreen('Help')}>
-            <CustomText>Help & Support</CustomText>
-            <IconButton icon='chevron-right' size={20} />
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.settingItem} onPress={handlePrivacyPolicy}>
-            <CustomText>Privacy Policy</CustomText>
-            <IconButton icon='open-in-new' size={20} />
-          </TouchableOpacity>
-          
-        </View>
-
-        <View style={styles.section}>
-          <CustomText fontSize='sm' style={styles.versionText}>Version 1.0.0</CustomText>
-        </View>
+          <SettingItem
+            title="Appearance"
+            icon="theme-light-dark"
+            onPress={appearanceModal.open}
+          />
+          <SettingItem
+            title="Language"
+            icon="translate"
+            onPress={languageModal.open}
+          />        
+          <SettingItem
+            title="Notifications"
+            icon="bell"
+            onPress={() => handleNavigateToScreen('Notifications')}
+          />       
+          <SettingItem
+            title="Account Settings"
+            icon="account-cog"
+            onPress={() => handleNavigateToScreen('Account')}
+          />        
+          <SettingItem
+            title="Feedback"
+            icon="message-text"
+            onPress={() => handleNavigateToScreen('Feedback')}
+          />        
+          <SettingItem
+            title="Privacy Policy"
+            icon="shield-check"
+            onPress={handlePrivacyPolicy}
+          />
+          <SettingItem
+            title="Version"
+            icon="information"
+            rightContent={app.expo.version}
+          />
       </ScrollView>
 
       {/* Modals */}
@@ -112,34 +131,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 5,
     width: '100%',
   },
   scrollView: {
     width: '100%',
     flex: 1,
   },
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-    color: '#666',
-  },
   settingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    width: '100%',
   },
-  settingItemContent: {
-    flex: 1,
-  },
-  versionText: {
-    color: '#999',
-    textAlign: 'center',
-    paddingVertical: 8,
+  settingItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
   },
 })

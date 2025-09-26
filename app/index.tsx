@@ -1,5 +1,5 @@
 import ActivityIndicator from '@/components/ActivityIndicator';
-import { auth } from '@/firebase/firebaseConfig';
+import { auth } from '@/firebaseConfig';
 import { useEmailVerificationDeadline } from '@/hooks/useEmailVerificationDeadline';
 import { userService } from '@/services/userService';
 import { useUserStore } from '@/stores/userStore';

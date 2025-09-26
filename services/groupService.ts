@@ -1,20 +1,20 @@
-import { db } from '@/firebase/firebaseConfig'
+import { db } from '@/firebaseConfig'
 import { Group } from '@/types/Group'
 import { UserProfile } from '@/types/UserProfile'
 import { validationRules } from '@/util/validation'
 import {
-    addDoc,
-    arrayRemove,
-    arrayUnion,
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    getDocs,
-    query,
-    serverTimestamp,
-    updateDoc,
-    where
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where
 } from 'firebase/firestore'
 
 /**

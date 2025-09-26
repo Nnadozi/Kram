@@ -1,4 +1,4 @@
-import { db } from '@/firebase/firebaseConfig'
+import { db } from '@/firebaseConfig'
 import { Message } from '@/types/Message'
 import { validationRules } from '@/util/validation'
 import {
